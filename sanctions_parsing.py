@@ -7,36 +7,37 @@ from bs4 import BeautifulSoup as BS
 import pandas as pd
 
 # получаем html код таблицы
-r = requests.get(f'https://www.alta.ru/tnved/forbidden_codes/')
+r = requests.get(f'https://wto.ru/uchastnikam-ved-sanktsii/')
 html = BS(r.content, 'html.parser')
 
-table1 = html.find("div", class_="responsive-table")
+table1 = html.find("table")
 
-# получаем заоловки с сайта
-headers = []
-for i in table1.find_all("th"):
-    title = i.text
-    headers.append(title)
-
-
-headers[-1] = "Направление"
-
-# Можно сделать по-другому:
-# headers = ["code", "english_name", "russian_name", "country", "import_or_export"]
-
-# заполняем наш датафрейм
+# получаем заголовки
+headers = ['country_name', 'what_i_need', 'other']
 
 mydata = pd.DataFrame(columns = headers)
-
-for j in table1.find_all("tr")[1:]:
+for j in table1.find_all("tr")[:]:
     try:
         row_data = j.find_all("td")
-        row = [i.text for i in row_data]
+        row = [i for i in row_data]
         length = len(mydata)
         mydata.loc[length] = row
     except:
         continue
 
         
-# скачиваем файл, если надо.
-# mydata.to_csv(r"sanctions.csv", index=False)
+list_of_hrefs_html = mydata["what_i_need"]
+dict_of_hrefs = {}
+l = len(list_of_hrefs_html)
+for i in range(l):
+  s = list_of_hrefs_html[i].p
+  a = s.find("a").get("href")
+  name = mydata['country_name'][i].text.replace("\n", "").replace("\t", "").replace("\xa0", "").strip()
+  dict_of_hrefs[name] = a
+    
+    
+for name in dict_of_hrefs:
+  href = dict_of_hrefs[name]
+  res = requests.get(f'https://wto.ru/uchastnikam-ved-sanktsii{href}').content
+  with open(f"{name}_санкции.xlsx", 'wb') as file:
+    file.write(res)
