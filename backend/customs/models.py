@@ -8,6 +8,9 @@ class Unit(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f'{self.unit_code}: {self.unit_name}'
+
 
 class Country(models.Model):
     country_id = models.IntegerField(unique=True, null=False, blank=False)
@@ -16,6 +19,9 @@ class Country(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f'{self.country_name}'
+
 
 class FederalDistrict(models.Model):
     federal_district_id = models.IntegerField(unique=True, null=False)
@@ -23,6 +29,9 @@ class FederalDistrict(models.Model):
     federal_district_name = models.CharField(max_length=200)
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.federal_district_code}: {self.federal_district_name}'
 
 
 class Region(models.Model):
@@ -37,6 +46,9 @@ class Region(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f'{self.region_code}: {self.region_name}'
+
 
 class CustomTnvedCode(models.Model):
     tnved_id = models.IntegerField(unique=True, blank=False)
@@ -46,14 +58,21 @@ class CustomTnvedCode(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f'{self.tnved_code}: {self.tnved_name}'
+
 
 class CustomData(models.Model):
-    tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='custom_data', to_field='tnved_id', db_column='custom_data_tnved_id')
+    tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='custom_data',
+                              to_field='tnved_id', db_column='custom_data_tnved_id')
     direction = models.CharField(max_length=1)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='custom_data', to_field='country_id', db_column='custom_data_country_id')
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='custom_data', to_field='country_id',
+                                db_column='custom_data_country_id')
     period = models.DateField()
-    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name='custom_data', to_field='region_id', db_column='custom_data_region_id')
-    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name='custom_data', to_field='unit_id', db_column='custom_data_unit_id')
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name='custom_data', to_field='region_id',
+                               db_column='custom_data_region_id')
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name='custom_data', to_field='unit_id',
+                             db_column='custom_data_unit_id')
     price = models.DecimalField(max_digits=20, decimal_places=2)
     volume = models.DecimalField(max_digits=20, decimal_places=5)
     quantity = models.DecimalField(max_digits=20, decimal_places=5)
