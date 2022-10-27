@@ -1,0 +1,61 @@
+from django.db import models
+
+
+class Unit(models.Model):
+    unit_id = models.IntegerField(unique=True, null=False, blank=False)
+    unit_code = models.IntegerField()
+    unit_name = models.CharField(max_length=200)
+    create_time = models.DateTimeField(auto_now_add=True)
+    modification_time = models.DateTimeField(auto_now=True)
+
+
+class Country(models.Model):
+    country_id = models.IntegerField(unique=True, null=False, blank=False)
+    country_name = models.CharField(max_length=200)
+    country_block = models.CharField(max_length=200)
+    create_time = models.DateTimeField(auto_now_add=True)
+    modification_time = models.DateTimeField(auto_now=True)
+
+
+class FederalDistrict(models.Model):
+    federal_district_id = models.IntegerField(unique=True, null=False)
+    federal_district_code = models.CharField(max_length=200)
+    federal_district_name = models.CharField(max_length=200)
+    create_time = models.DateTimeField(auto_now_add=True)
+    modification_time = models.DateTimeField(auto_now=True)
+
+
+class Region(models.Model):
+    region_id = models.IntegerField(unique=True, blank=False)
+    region_code = models.CharField(max_length=200)
+    region_name = models.CharField(max_length=200)
+    federal_district = models.ForeignKey(FederalDistrict,
+                                         to_field='federal_district_id',
+                                         on_delete=models.PROTECT,
+                                         db_column='region_federal_district_id',
+                                         related_name='regions')
+    create_time = models.DateTimeField(auto_now_add=True)
+    modification_time = models.DateTimeField(auto_now=True)
+
+
+class CustomTnvedCode(models.Model):
+    tnved_id = models.IntegerField(unique=True, blank=False)
+    tnved_code = models.IntegerField()
+    tnved_name = models.CharField(max_length=200)
+    parent_tnved = models.ForeignKey('self', on_delete=models.RESTRICT, to_field='tnved_id', related_name='child_codes')
+    create_time = models.DateTimeField(auto_now_add=True)
+    modification_time = models.DateTimeField(auto_now=True)
+
+
+class CustomData(models.Model):
+    tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='custom_data', to_field='tnved_id', db_column='custom_data_tnved_id')
+    direction = models.CharField(max_length=1)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='custom_data', to_field='country_id', db_column='custom_data_country_id')
+    period = models.DateField()
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name='custom_data', to_field='region_id', db_column='custom_data_region_id')
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name='custom_data', to_field='unit_id', db_column='custom_data_unit_id')
+    price = models.DecimalField(max_digits=20, decimal_places=2)
+    volume = models.DecimalField(max_digits=20, decimal_places=5)
+    quantity = models.DecimalField(max_digits=20, decimal_places=5)
+    create_time = models.DateTimeField(auto_now_add=True)
+    modification_time = models.DateTimeField(auto_now=True)
