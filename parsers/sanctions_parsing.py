@@ -43,11 +43,8 @@ def sanctions_parsing():
         href = dict_of_hrefs[name]
         res = requests.get(f'https://wto.ru{href}').content
 
-
-
         os.chdir(r'/ldt_hackaton-backend/preprocessing/sanctions_data')
         with open(f"{name}_санкции.xlsx", 'wb') as file:
             file.write(res)
-
 
     return "Done"
