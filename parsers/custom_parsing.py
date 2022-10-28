@@ -17,8 +17,9 @@ def custom_parsing(cods_of_states, year):
                  "direction":"",
                  "period":[{"start":f"{year - 1}-12-31","end":f"{year}-12-31"}]
                  }).content
-            os.mkdir(f"/ldt_hackaton-backend/preprocessing/custom_data/{code}") # изменяйте в этих двух строчках на то, что надо
-            with open(f"/ldt_hackaton-backend/preprocessing/custom_data/{code}/DATTSVT.xlsx", 'wb') as file:
+            # r = requests.get(r) # поскольку не работает, я не знаю нужно это или нет
+            os.mkdir(f"/ldt_hackaton-backend/preprocessing/custom_data/{year}/{code}") # изменяйте в этих двух строчках на то, что надо
+            with open(f"/ldt_hackaton-backend/preprocessing/custom_data/{year}/{code}/DATTSVT.xlsx", 'wb') as file:
                 file.write(r)
         except:
          continue
