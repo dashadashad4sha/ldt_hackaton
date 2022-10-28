@@ -1,6 +1,3 @@
-# Это парсер для санкций. Для запуска нужно использовать функцию sanctions_parsing,
-# и все данные сохранятся в нужной директории, разделенные по странам
-
 import os
 import requests
 from bs4 import BeautifulSoup as BS
@@ -8,6 +5,10 @@ import pandas as pd
 
 
 def sanctions_parsing():
+    
+    """Это парсер для санкций. Для запуска нужно использовать функцию sanctions_parsing,
+и все данные сохранятся в нужной директории, разделенные по странам"""
+    
     r = requests.get(f'https://wto.ru/uchastnikam-ved-sanktsii/')
     html = BS(r.content, 'html.parser')
 
@@ -33,6 +34,9 @@ def sanctions_parsing():
     dict_of_hrefs = {}
 
     l = len(list_of_hrefs_html)
+    
+    
+    
     for i in range(l):
         s = list_of_hrefs_html[i].p
         a = s.find("a").get("href")
@@ -48,3 +52,6 @@ def sanctions_parsing():
             file.write(res)
 
     return "Done"
+
+if __name__ == "__main__":
+    sanctions_parsing()
