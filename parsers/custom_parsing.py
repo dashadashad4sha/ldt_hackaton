@@ -18,7 +18,6 @@ def custom_parsing(cods_of_states, year):
 
     for code in cods_of_states:
         try:
-            print("go")
             k = random.randint(1, 5)
             time.sleep(k)
             payload = {'direction': "", 'exportType': "Csv", 'federalDistricts': [],
