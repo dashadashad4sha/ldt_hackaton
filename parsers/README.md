@@ -1,4 +1,4 @@
-## start parsing (начинаем работу с проектом)
+## start parsing (начинаем работу с парсингом)
 1) install libraries
    (устанавливаем библиотеки)
 ```pip install request
