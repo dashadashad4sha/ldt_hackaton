@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup as BS
 import pandas as pd
 
-
+BASE_DIR = Path(__file__).resolve().parent.parent
 def sanctions_parsing():
     
     """Это парсер для санкций. Для запуска нужно использовать функцию sanctions_parsing,
