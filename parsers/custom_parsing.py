@@ -2,10 +2,12 @@ import requests as r
 import random
 import os
 import time
+from pathlib import Path
 
 url = 'http://stat.customs.gov.ru/api/DataAnalysis/UnloadData'
 user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/' \
              '106.0.0.0 Safari/537.36'
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 def custom_parsing(cods_of_states, year):
@@ -16,6 +18,7 @@ def custom_parsing(cods_of_states, year):
 
     for code in cods_of_states:
         try:
+            print("go")
             k = random.randint(1, 5)
             time.sleep(k)
             payload = {'direction': "", 'exportType': "Csv", 'federalDistricts': [],
@@ -27,9 +30,8 @@ def custom_parsing(cods_of_states, year):
             requests = r.post(url, json=payload)
 
             os.mkdir(
-                f"/ldt_hackaton/preprocessing/custom_data/{year}/{code}")
-
-            with open(f"/ldt_hackaton/preprocessing/custom_data/{year}/{code}/DATTSVT.xlsx", 'wb') as file:
+                f"{BASE_DIR}/preprocessing/custom_data/{year}/{code}")
+            with open(f"{BASE_DIR}/preprocessing/custom_data/{year}/{code}/DATTSVT.xlsx", 'wb') as file:
                 file.write(requests.content)
         except:
             continue
