@@ -1,4 +1,4 @@
-## start project
+## start project (начинаем работу с проектом)
 1) create and activate virtual environment
   >создаём и активируем виртуальное окружение
 ```
