@@ -1,0 +1,966 @@
+{
+	"info": {
+		"_postman_id": "cb3e15d9-59da-429e-acde-b512fc513405",
+		"name": "predictions service API",
+		"description": "API for customs predictions service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "customs",
+			"item": [
+				{
+					"name": "country",
+					"item": [
+						{
+							"name": "customs country list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/customs/country/?limit=-78178660&offset=-78178660",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"customs",
+										"country",
+										""
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "-78178660",
+											"description": "Number of results to return per page."
+										},
+										{
+											"key": "offset",
+											"value": "-78178660",
+											"description": "The initial index from which to return the results."
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/customs/country/?limit=-78178660&offset=-78178660",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"customs",
+												"country",
+												""
+											],
+											"query": [
+												{
+													"key": "limit",
+													"value": "-78178660"
+												},
+												{
+													"key": "offset",
+													"value": "-78178660"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"count\": -98530202,\n  \"results\": [\n    {\n      \"country_id\": -22828536,\n      \"country_name\": \"Excepteur\",\n      \"country_block\": \"nisi in\"\n    },\n    {\n      \"country_id\": -60024213,\n      \"country_name\": \"esse\",\n      \"country_block\": \"sunt ipsum fugiat\"\n    }\n  ],\n  \"next\": \"http://oOdS.azjcBaHiUcUUMktxriphqMnnydndC2,.O\",\n  \"previous\": \"https://WSczinkPEdPXbXKAiKVDxirHqszsr.jlwEahmWx8kh165-Ld-MVoUp1Sms9JJqRhm-s\"\n}"
+								}
+							]
+						},
+						{
+							"name": "customs country read",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/customs/country/:id/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"customs",
+										"country",
+										":id",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-78178660",
+											"description": "(Required) A unique integer value identifying this country."
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/customs/country/:id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"customs",
+												"country",
+												":id",
+												""
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-78178660",
+													"description": "(Required) A unique integer value identifying this country."
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"country_id\": 7242801,\n  \"country_name\": \"elit enim non irure fugiat\",\n  \"country_block\": \"magna eu cillum\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "federal-district",
+					"item": [
+						{
+							"name": "customs federal-district list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/customs/federal-district/?limit=-78178660&offset=-78178660",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"customs",
+										"federal-district",
+										""
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "-78178660",
+											"description": "Number of results to return per page."
+										},
+										{
+											"key": "offset",
+											"value": "-78178660",
+											"description": "The initial index from which to return the results."
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/customs/federal-district/?limit=-78178660&offset=-78178660",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"customs",
+												"federal-district",
+												""
+											],
+											"query": [
+												{
+													"key": "limit",
+													"value": "-78178660"
+												},
+												{
+													"key": "offset",
+													"value": "-78178660"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"count\": -33022344,\n  \"results\": [\n    {\n      \"federal_district_id\": 51465791,\n      \"federal_district_code\": \"tempor\",\n      \"federal_district_name\": \"mollit ut in velit\"\n    },\n    {\n      \"federal_district_id\": 89658946,\n      \"federal_district_code\": \"est culpa dolore irure\",\n      \"federal_district_name\": \"cillum qui\"\n    }\n  ],\n  \"next\": \"http://lzhVBVSw.bilWh0OtkzmykrxOE,YNdPbQnWCehcJ3iwm6qDtPe,fu1-SCaP52sD9\",\n  \"previous\": \"http://FtIJrGCvVvFGUMqnMv.brgB\"\n}"
+								}
+							]
+						},
+						{
+							"name": "customs federal-district read",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/customs/federal-district/:id/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"customs",
+										"federal-district",
+										":id",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-78178660",
+											"description": "(Required) A unique integer value identifying this federal district."
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/customs/federal-district/:id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"customs",
+												"federal-district",
+												":id",
+												""
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-78178660",
+													"description": "(Required) A unique integer value identifying this federal district."
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"federal_district_id\": 77017510,\n  \"federal_district_code\": \"in d\",\n  \"federal_district_name\": \"aute in\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "region",
+					"item": [
+						{
+							"name": "customs region list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/customs/region/?limit=-78178660&offset=-78178660",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"customs",
+										"region",
+										""
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "-78178660",
+											"description": "Number of results to return per page."
+										},
+										{
+											"key": "offset",
+											"value": "-78178660",
+											"description": "The initial index from which to return the results."
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/customs/region/?limit=-78178660&offset=-78178660",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"customs",
+												"region",
+												""
+											],
+											"query": [
+												{
+													"key": "limit",
+													"value": "-78178660"
+												},
+												{
+													"key": "offset",
+													"value": "-78178660"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"count\": 4233610,\n  \"results\": [\n    {\n      \"region_id\": 10131034,\n      \"region_code\": \"dolore sit\",\n      \"region_name\": \"pariatur reprehenderit\",\n      \"federal_district\": 8274415\n    },\n    {\n      \"region_id\": 70042858,\n      \"region_code\": \"dolore do dolore enim\",\n      \"region_name\": \"eu amet in cupidatat\",\n      \"federal_district\": -10478368\n    }\n  ],\n  \"next\": \"https://eJePEpRqYPrHBhJ.rkjSZlE9t3CrNf,VKuqyjq.j1OTqmWgYXYj4CcF1qUovaY5dE8mHpTnH6LutbrRmpnpfvsXC5\",\n  \"previous\": \"http://kNHrrkpNDsWwFsjvjg.mfyLPKkXOwhmG.fLwbF\"\n}"
+								}
+							]
+						},
+						{
+							"name": "customs region read",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/customs/region/:id/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"customs",
+										"region",
+										":id",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-78178660",
+											"description": "(Required) A unique integer value identifying this region."
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/customs/region/:id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"customs",
+												"region",
+												":id",
+												""
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-78178660",
+													"description": "(Required) A unique integer value identifying this region."
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"region_id\": -74746099,\n  \"region_code\": \"id ad esse dolore sunt\",\n  \"region_name\": \"pariatur\",\n  \"federal_district\": 7270494\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "unit",
+					"item": [
+						{
+							"name": "customs unit list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/customs/unit/?limit=-78178660&offset=-78178660",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"customs",
+										"unit",
+										""
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "-78178660",
+											"description": "Number of results to return per page."
+										},
+										{
+											"key": "offset",
+											"value": "-78178660",
+											"description": "The initial index from which to return the results."
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/customs/unit/?limit=-78178660&offset=-78178660",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"customs",
+												"unit",
+												""
+											],
+											"query": [
+												{
+													"key": "limit",
+													"value": "-78178660"
+												},
+												{
+													"key": "offset",
+													"value": "-78178660"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"count\": 87121166,\n  \"results\": [\n    {\n      \"unit_id\": 74248938,\n      \"unit_code\": -26548895,\n      \"unit_name\": \"dolor aute sit ea\"\n    },\n    {\n      \"unit_id\": 1116466,\n      \"unit_code\": -83576052,\n      \"unit_name\": \"labore nisi\"\n    }\n  ],\n  \"next\": \"https://MYRaVSbaUZbjuyW.bhtsRN4m6nTCRocVVz,dovLU+JSt\",\n  \"previous\": \"https://sapjvLerqoHqSeZXGmsHUqHPw.mbzlnukRAzTti.d+AS5yTfpIRSau4o.mgd0iIs4KB9W7\"\n}"
+								}
+							]
+						},
+						{
+							"name": "customs unit read",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/customs/unit/:id/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"customs",
+										"unit",
+										":id",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-78178660",
+											"description": "(Required) A unique integer value identifying this unit."
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Untitled Example",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: basic",
+												"key": "Authorization",
+												"value": "Basic <credentials>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/customs/unit/:id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"customs",
+												"unit",
+												":id",
+												""
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "-78178660",
+													"description": "(Required) A unique integer value identifying this unit."
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"unit_id\": 47793739,\n  \"unit_code\": 34353033,\n  \"unit_name\": \"id aliquip qui ut\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "employee/token",
+			"item": [
+				{
+					"name": "employee token create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"ut ullamco\",\n  \"password\": \"ea amet mollit\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/employee/token/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"employee",
+								"token",
+								""
+							]
+						},
+						"description": "Takes a set of user credentials and returns an access and refresh JSON web\ntoken pair to prove the authentication of those credentials."
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: basic",
+										"key": "Authorization",
+										"value": "Basic <credentials>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"ut ullamco\",\n  \"password\": \"ea amet mollit\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/employee/token/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"employee",
+										"token",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"username\": \"ut ullamco\",\n  \"password\": \"ea amet mollit\"\n}"
+						}
+					]
+				},
+				{
+					"name": "employee token refresh create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refresh\": \"nostrud mollit\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/employee/token/refresh/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"employee",
+								"token",
+								"refresh",
+								""
+							]
+						},
+						"description": "Takes a refresh type JSON web token and returns an access type JSON web\ntoken if the refresh token is valid."
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: basic",
+										"key": "Authorization",
+										"value": "Basic <credentials>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"refresh\": \"nostrud mollit\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/employee/token/refresh/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"employee",
+										"token",
+										"refresh",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"refresh\": \"amet Lorem do veniam\",\n  \"access\": \"esse Excepteur\"\n}"
+						}
+					]
+				},
+				{
+					"name": "employee token verify create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"aliquip sint\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/employee/token/verify/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"employee",
+								"token",
+								"verify",
+								""
+							]
+						},
+						"description": "Takes a token and indicates if it is valid.  This view provides no\ninformation about a token's fitness for a particular use."
+					},
+					"response": [
+						{
+							"name": "Untitled Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: basic",
+										"key": "Authorization",
+										"value": "Basic <credentials>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"token\": \"aliquip sint\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/employee/token/verify/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"employee",
+										"token",
+										"verify",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"token\": \"aliquip sint\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "admin",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://127.0.0.1:8000"
+		}
+	]
+}
