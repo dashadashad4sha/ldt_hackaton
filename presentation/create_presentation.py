@@ -197,5 +197,3 @@ def create_presentation(tnved_code='Вы не выбрали код', product="�
 
 # if __name__ == "__main__":
 #     create_presentation()
-#     print(text_analytics('штук', 1000, 1200, 123, 45654, 'dfggdgf', 456456, 56456456465, ["ыавп", "рвыаолр"], ["ыавп", "рвыаолр"],
-#                    ["ыавп", "рвыаолр"], ["ыавп", "рвыаолр"], 'rjhdgidshgisudfghlsdfkjghdfskjghdfskl', "becouse sdjkgfhdskjlfhsdkjl"))
