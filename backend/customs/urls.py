@@ -8,5 +8,6 @@ router.register('unit', views.UnitView, basename='unit')
 router.register('region', views.RegionView, basename='region')
 router.register('country', views.CountryView, basename='country')
 router.register('federal-district', views.FederalDistrictView, basename='federal_district')
+router.register('custom-data', views.CustomDataView, basename='custom-data')
 
 urlpatterns = router.urls
