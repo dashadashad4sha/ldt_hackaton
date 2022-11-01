@@ -1,5 +1,6 @@
 import csv
 import datetime
+from itertools import islice
 from decimal import Decimal
 from pathlib import PurePath
 
@@ -113,24 +114,25 @@ class Command(BaseCommand):
                         tnved=tnved
                     )
             elif options['table'] == 'customs_data':
-                for i, rec in enumerate(csv_reader):
-                    region = Region.objects.get(region_id=rec[5])
-                    country = Country.objects.get(country_id=rec[6])
-                    tnved = CustomTnvedCode.objects.get(tnved_id=rec[7])
-                    unit = Unit.objects.get(unit_id=rec[8])
-                    CustomData.objects.create(
-                        tnved=tnved,
+                items = (CustomData(
+                        tnved=CustomTnvedCode.objects.get(tnved_id=rec[7]),
                         direction=rec[0],
-                        country=country,
+                        country=Country.objects.get(country_id=rec[6]),
                         period=rec[1],
-                        region=region,
-                        unit=unit,
+                        region=Region.objects.get(region_id=rec[5]),
+                        unit=Unit.objects.get(unit_id=rec[8]),
                         price=Decimal(rec[2].replace(',', '.')),
                         volume=Decimal(rec[3].replace(',', '.')),
                         quantity=Decimal(rec[4].replace(',', '.')),
-                    )
-                    if i % 100 == 0:
-                        print(datetime.datetime.now().strftime('%Y.%d.%m %H:%M:%S'))
+                    ) for rec in csv_reader)
+                print('create objects')
+                while True:
+                    batch = list(islice(items, 10000))
+                    if not batch:
+                        break
+                    CustomData.objects.bulk_create(batch, 10000)
+                    print(datetime.datetime.now().strftime('%Y.%d.%m %H:%M:%S'))
+
                 # for chunk in gen_chunks(csv_reader, 100000):
                 #     print(datetime.datetime.now().strftime('%Y:%d:%m %H:%M:%S'))
                 #     items = [CustomData(
