@@ -52,7 +52,7 @@ class Region(models.Model):
 
 class CustomTnvedCode(models.Model):
     tnved_id = models.IntegerField(unique=True, blank=False)
-    tnved_code = models.IntegerField()
+    tnved_code = models.BigIntegerField()
     tnved_name = models.CharField(max_length=400)
     tnved_fee = models.CharField(max_length=200, null=True)
     create_time = models.DateTimeField(auto_now_add=True)
