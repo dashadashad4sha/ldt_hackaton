@@ -6,7 +6,7 @@ from pathlib import PurePath
 from django.core.management.base import BaseCommand
 from django.db import models
 
-from customs.models import Unit, Country, FederalDistrict, Region, CustomTnvedCode, Sanction, CustomData
+from customs.models import Unit, Country, FederalDistrict, Region, CustomTnvedCode, Sanction, CustomData, Recommendation
 from django.conf import settings
 
 BASE_DIR = settings.BASE_DIR
@@ -39,7 +39,8 @@ class Command(BaseCommand):
             '-t',
             '--table',
             help='specify table',
-            choices=('unit', 'country', 'federal_district', 'region', 'tnved_code', 'sanction', 'customs_data',)
+            choices=('unit', 'country', 'federal_district', 'region', 'tnved_code', 'sanction', 'customs_data',
+                     'recommendation',)
         )
 
     def handle(self, *args, **options):
@@ -51,6 +52,7 @@ class Command(BaseCommand):
             'tnved_code': CustomTnvedCode,
             'sanction': Sanction,
             'customs_data': CustomData,
+            'recommendation': Recommendation
         }
 
         table: models.Model = tables.get(options['table'])
@@ -142,4 +144,11 @@ class Command(BaseCommand):
                     ) for rec in chunk]
                     CustomData.objects.bulk_create(items)
                     print(datetime.datetime.now().strftime('%Y:%d:%m %H:%M:%S'))
+            elif options['table'] == 'recommendation':
+                for rec in csv_reader:
+                    Recommendation.objects.create(
+                        recommendation_id=rec[0],
+                        tnved=CustomTnvedCode.objects.get(tnved_id=rec[1]),
+                        region=Region.objects.get(region_id=rec[2])
+                    )
         self.stdout.write('finished loading')
