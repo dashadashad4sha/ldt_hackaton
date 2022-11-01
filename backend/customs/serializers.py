@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
-from customs.models import Unit, Region, Country, FederalDistrict, CustomTnvedCode, CustomData
+from customs.models import Unit, Region, Country, \
+    FederalDistrict, CustomTnvedCode, CustomData, Sanction, Recommendation
 
 
 class UnitSerializer(ModelSerializer):
@@ -37,3 +38,15 @@ class CustomDataSerializer(ModelSerializer):
     class Meta:
         model = CustomData
         fields = ['tnved', 'direction', 'country', 'period', 'region', 'unit', 'price', 'volume', 'quantity']
+
+
+class SanctionSerializer(ModelSerializer):
+    class Meta:
+        model = Sanction
+        fields = ['sanction_id', 'direction', 'country', 'tnved']
+
+
+class RecommendationSerializer(ModelSerializer):
+    class Meta:
+        model = Recommendation
+        fields = ['recommendation_id', 'tnved', 'region']
