@@ -46,18 +46,8 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
 
 
 class CustomDataView(viewsets.GenericViewSet,
-                          mixins.ListModelMixin,
-                          mixins.RetrieveModelMixin
-                          ):
+                     mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin
+                     ):
     queryset = CustomData.objects.all()
     serializer_class = CustomDataSerializer
-
-    serializer_class = FederalDistrictSerializer
-
-
-class CustomTnvedCodeView(viewsets.GenericViewSet,
-                          mixins.ListModelMixin,
-                          mixins.RetrieveModelMixin
-                          ):
-    queryset = CustomTnvedCode.objects.all()
-    serializer_class = TnvedCodeSerializer
