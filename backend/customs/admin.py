@@ -26,4 +26,4 @@ class FederalDistrictAdmin(admin.ModelAdmin):
 
 @admin.register(CustomTnvedCode)
 class CustomTnvedCodeAdmin(admin.ModelAdmin):
-    list_display = ['tnved_id', 'tnved_code', 'tnved_name', 'parent_tnved']
+    list_display = ['tnved_id', 'tnved_code', 'tnved_name', 'tnved_fee']

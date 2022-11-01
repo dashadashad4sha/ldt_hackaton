@@ -54,7 +54,7 @@ class CustomTnvedCode(models.Model):
     tnved_id = models.IntegerField(unique=True, blank=False)
     tnved_code = models.IntegerField()
     tnved_name = models.CharField(max_length=200)
-    parent_tnved = models.ForeignKey('self', on_delete=models.RESTRICT, to_field='tnved_id', related_name='child_codes')
+    tnved_fee = models.CharField(max_length=200, null=True)
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
 
@@ -78,3 +78,11 @@ class CustomData(models.Model):
     quantity = models.DecimalField(max_digits=20, decimal_places=5)
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
+
+
+class Sanction(models.Model):
+    sanction_id = models.IntegerField(unique=True, blank=False)
+    direction = models.CharField(max_length=1)
+    country = models.ForeignKey(Country, to_field='country_id', on_delete=models.RESTRICT, related_name='sanctions', db_column='sanction_country_id')
+    tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='sanctions', db_column='sanction_tnved_id')
+

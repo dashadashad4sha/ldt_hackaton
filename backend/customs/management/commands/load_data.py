@@ -1,11 +1,29 @@
 import csv
+import datetime
+from decimal import Decimal
 from pathlib import PurePath
 
 from django.core.management.base import BaseCommand
-from customs.models import Unit, Country, FederalDistrict, Region
+from django.db import models
+
+from customs.models import Unit, Country, FederalDistrict, Region, CustomTnvedCode, Sanction, CustomData
 from django.conf import settings
 
 BASE_DIR = settings.BASE_DIR
+
+
+def gen_chunks(reader, chunk_size=100):
+    """
+    Chunk generator. Take a CSV `reader` and yield
+    `chunksize` sized slices.
+    """
+    chunk = []
+    for i, line in enumerate(reader):
+        if i % chunk_size == 0 and i > 0:
+            yield chunk
+            del chunk[:]  # or: chunk = []
+        chunk.append(line)
+    yield chunk
 
 
 class Command(BaseCommand):
@@ -21,7 +39,7 @@ class Command(BaseCommand):
             '-t',
             '--table',
             help='specify table',
-            choices=('unit', 'country', 'federal_district', 'region')
+            choices=('unit', 'country', 'federal_district', 'region', 'tnved_code', 'sanction', 'customs_data',)
         )
 
     def handle(self, *args, **options):
@@ -30,9 +48,12 @@ class Command(BaseCommand):
             'country': Country,
             'federal_district': FederalDistrict,
             'region': Region,
+            'tnved_code': CustomTnvedCode,
+            'sanction': Sanction,
+            'customs_data': CustomData,
         }
 
-        table = tables.get(options['table'])
+        table: models.Model = tables.get(options['table'])
 
         file_path = PurePath(options['file'])
 
@@ -71,5 +92,54 @@ class Command(BaseCommand):
                         region_name=rec[2],
                         federal_district=federal_district
                     )
-
+            elif options['table'] == 'tnved_code':
+                for rec in csv_reader:
+                    table.objects.create(
+                        tnved_id=rec[0],
+                        tnved_code=rec[1],
+                        tnved_name=rec[2],
+                        tnved_fee=rec[3]
+                    )
+            elif options['table'] == 'sanction':
+                for rec in csv_reader:
+                    country = Country.objects.get(country_id=rec[2])
+                    tnved = CustomTnvedCode.objects.get(tnved_id=rec[3])
+                    table.objects.create(
+                        sanction_id=rec[0],
+                        direction=rec[1],
+                        country=country,
+                        tnved=tnved
+                    )
+            elif options['table'] == 'customs_data':
+                # for rec in csv_reader:
+                #     region = Region.objects.get(region_id=rec[5])
+                #     country = Country.objects.get(country_id=rec[6])
+                #     tnved = CustomTnvedCode.objects.get(tnved_id=rec[7])
+                #     unit = Unit.objects.get(unit_id=rec[8])
+                #     CustomData.objects.create(
+                #         tnved=tnved,
+                #         direction=rec[0],
+                #         country=country,
+                #         period=rec[1],
+                #         region=region,
+                #         unit=unit,
+                #         price=Decimal(rec[2].replace(',', '.')),
+                #         volume=Decimal(rec[3].replace(',', '.')),
+                #         quantity=Decimal(rec[4].replace(',', '.')),
+                #     )
+                for chunk in gen_chunks(csv_reader, 100000):
+                    print(datetime.datetime.now().strftime('%Y:%d:%m %H:%M:%S'))
+                    items = [CustomData(
+                        tnved=CustomTnvedCode.objects.get(tnved_id=rec[7]),
+                        direction=rec[0],
+                        country=Country.objects.get(country_id=rec[6]),
+                        period=rec[1],
+                        region=Region.objects.get(region_id=rec[5]),
+                        unit=Unit.objects.get(unit_id=rec[8]),
+                        price=Decimal(rec[2].replace(',', '.')),
+                        volume=Decimal(rec[3].replace(',', '.')),
+                        quantity=Decimal(rec[4].replace(',', '.')),
+                    ) for rec in chunk]
+                    CustomData.objects.bulk_create(items)
+                    print(datetime.datetime.now().strftime('%Y:%d:%m %H:%M:%S'))
         self.stdout.write('finished loading')
