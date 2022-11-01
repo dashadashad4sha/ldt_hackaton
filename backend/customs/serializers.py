@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from customs.models import Unit, Region, Country, FederalDistrict, CustomTnvedCode
+from customs.models import Unit, Region, Country, FederalDistrict, CustomTnvedCode, CustomData
 
 
 class UnitSerializer(ModelSerializer):
@@ -36,3 +36,10 @@ class TnvedCodeSerializer(ModelSerializer):
     class Meta:
         model = CustomTnvedCode
         fields = ['tnved_id', 'tnved_code', 'tnved_name', 'parent_tnved']
+
+
+class CustomDataSerializer(ModelSerializer):
+
+    class Meta:
+        model = CustomData
+        fields = ['tnved', 'direction', 'country', 'period', 'region', 'unit', 'price', 'volume', 'quantity']
