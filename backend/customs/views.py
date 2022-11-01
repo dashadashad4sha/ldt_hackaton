@@ -1,8 +1,8 @@
 from rest_framework import viewsets, mixins
 
-from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData
+from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
-    TnvedCodeSerializer, CustomDataSerializer
+    TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer
 
 
 class UnitView(viewsets.GenericViewSet,
@@ -51,3 +51,20 @@ class CustomDataView(viewsets.GenericViewSet,
                      ):
     queryset = CustomData.objects.all()
     serializer_class = CustomDataSerializer
+
+
+class SanctionView(viewsets.GenericViewSet,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin
+                   ):
+    queryset = Sanction.objects.all()
+    serializer_class = SanctionSerializer
+
+
+class RecommendationView(viewsets.GenericViewSet,
+                         mixins.ListModelMixin,
+                         mixins.RetrieveModelMixin
+                         ):
+    queryset = Recommendation.objects.all()
+    serializer_class = RecommendationSerializer
+
