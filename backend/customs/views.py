@@ -1,8 +1,8 @@
 from rest_framework import viewsets, mixins
 
-from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict
+from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
-    TnvedCodeSerializer
+    TnvedCodeSerializer, CustomDataSerializer
 
 
 class UnitView(viewsets.GenericViewSet,
@@ -34,6 +34,24 @@ class FederalDistrictView(viewsets.GenericViewSet,
                           mixins.RetrieveModelMixin
                           ):
     queryset = FederalDistrict.objects.all()
+    serializer_class = FederalDistrictSerializer
+
+
+class CustomTnvedCodeView(viewsets.GenericViewSet,
+                          mixins.ListModelMixin,
+                          mixins.RetrieveModelMixin
+                          ):
+    queryset = CustomTnvedCode.objects.all()
+    serializer_class = TnvedCodeSerializer
+
+
+class CustomDataView(viewsets.GenericViewSet,
+                          mixins.ListModelMixin,
+                          mixins.RetrieveModelMixin
+                          ):
+    queryset = CustomData.objects.all()
+    serializer_class = CustomDataSerializer
+
     serializer_class = FederalDistrictSerializer
 
 
