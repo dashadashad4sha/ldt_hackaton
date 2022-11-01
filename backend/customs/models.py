@@ -83,6 +83,14 @@ class CustomData(models.Model):
 class Sanction(models.Model):
     sanction_id = models.IntegerField(unique=True, blank=False)
     direction = models.CharField(max_length=1)
-    country = models.ForeignKey(Country, to_field='country_id', on_delete=models.RESTRICT, related_name='sanctions', db_column='sanction_country_id')
-    tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='sanctions', db_column='sanction_tnved_id')
+    country = models.ForeignKey(Country, to_field='country_id', on_delete=models.RESTRICT, related_name='sanctions',
+                                db_column='sanction_country_id')
+    tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='sanctions',
+                              db_column='sanction_tnved_id')
 
+
+class Recommendation(models.Model):
+    recomendation_id = models.IntegerField(unique=True)
+    tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='recommendations',
+                              to_field='tnved_id', db_column='recommendation_tnved_id')
+    region = models.ForeignKey(Region, on_delete=models.RESTRICT, related_name='recommendations', to_field='region_id', db_column='recommendation_region_id')
