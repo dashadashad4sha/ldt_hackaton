@@ -6,4 +6,5 @@ python-dotenv~=0.21.0
 gunicorn
 whitenoise
 ipython
+psycopg2-binary==2.9.3
 
