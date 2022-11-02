@@ -7,4 +7,5 @@ gunicorn
 whitenoise
 ipython
 psycopg2-binary==2.9.3
+django-cors-headers
 
