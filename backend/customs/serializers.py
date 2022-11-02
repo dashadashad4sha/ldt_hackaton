@@ -53,5 +53,5 @@ class RecommendationSerializer(serializers.ModelSerializer):
 
 
 class TopRecommendationSerializer(serializers.Serializer):
-    tnved_code = serializers.CharField()
-    tnved_name = serializers.CharField()
+    tnved__tnved_code = serializers.CharField()
+    tnved__tnved_name = serializers.CharField()
