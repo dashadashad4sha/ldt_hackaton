@@ -6,11 +6,15 @@ from rest_framework.response import Response
 
 from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
-    TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, TopRecommendationSerializer
-
+    TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
+    TopRecommendationSerializer, CustomDataChartSerializer
 
 doc_get_top_recommendation_resp = {
     status.HTTP_200_OK: TopRecommendationSerializer(many=True)
+}
+
+doc_get_customdata_chart = {
+    status.HTTP_200_OK: CustomDataChartSerializer(many=True)
 }
 
 
@@ -61,9 +65,12 @@ class CustomDataView(viewsets.GenericViewSet,
     queryset = CustomData.objects.all()
     serializer_class = CustomDataSerializer
 
+    @swagger_auto_schema(responses=doc_get_customdata_chart)
     @action(methods=['GET'], detail=False, url_path='chart/import')
     def import_char(self, request, *args, **kwargs):
-        queryset = CustomData.objects.filter(direction='И')
+        instance = CustomData.objects.filter(direction='И').values('period').annotate(volume=Sum('price'))
+        serializer = CustomDataChartSerializer(instance, many=True)
+        return Response(serializer.data)
 
 
 class SanctionView(viewsets.GenericViewSet,
@@ -81,13 +88,11 @@ class RecommendationView(viewsets.GenericViewSet,
     queryset = Recommendation.objects.all()
     serializer_class = RecommendationSerializer
 
-    @swagger_auto_schema(operation_id='config',
-                         responses=doc_get_top_recommendation_resp)
+    @swagger_auto_schema(
+        responses=doc_get_top_recommendation_resp)
     @action(methods=['GET'], detail=False, url_path='top')
     def top_recommendation(self, request, *args, **kargs):
         instance = Recommendation.objects.prefetch_related('region').filter(region__region_name='Москва').values(
             'tnved__tnved_code', 'tnved__tnved_name')
         serializer = TopRecommendationSerializer(instance=instance, many=True)
         return Response(serializer.data)
-
-

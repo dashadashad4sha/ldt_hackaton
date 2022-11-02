@@ -74,8 +74,8 @@ class CustomData(models.Model):
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name='custom_data', to_field='unit_id',
                              db_column='custom_data_unit_id')
     price = models.DecimalField(max_digits=20, decimal_places=2)
-    volume = models.DecimalField(max_digits=20, decimal_places=5)
-    quantity = models.DecimalField(max_digits=20, decimal_places=5)
+    volume = models.DecimalField(max_digits=20, decimal_places=2)
+    quantity = models.DecimalField(max_digits=20, decimal_places=2)
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
 

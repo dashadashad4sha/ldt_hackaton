@@ -55,3 +55,8 @@ class RecommendationSerializer(serializers.ModelSerializer):
 class TopRecommendationSerializer(serializers.Serializer):
     tnved__tnved_code = serializers.CharField()
     tnved__tnved_name = serializers.CharField()
+
+
+class CustomDataChartSerializer(serializers.Serializer):
+    period = serializers.DateField(format='%Y.%m.%d')
+    volume = serializers.DecimalField(max_digits=15, decimal_places=2)
