@@ -1,11 +1,14 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from django.db.models import Sum
 from rest_framework.response import Response
 
-from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
-from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
+from django.db.models import Q
+
+from .models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
+from .serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
     TopRecommendationSerializer, CustomDataChartSerializer
 
@@ -68,9 +71,32 @@ class CustomDataView(viewsets.GenericViewSet,
     @swagger_auto_schema(responses=doc_get_customdata_chart)
     @action(methods=['GET'], detail=False, url_path='chart/import')
     def import_char(self, request, *args, **kwargs):
-        instance = CustomData.objects.filter(direction='И').values('period').annotate(volume=Sum('price'))
-        serializer = CustomDataChartSerializer(instance, many=True)
-        return Response(serializer.data)
+        search_query_tnved_name = request.GET.get('name')
+        search_query_tnved_code = request.GET.get('code')
+
+        if not search_query_tnved_code:
+            search_query_tnved_code = 0
+
+        if not search_query_tnved_name:
+            print(search_query_tnved_name, "\n", search_query_tnved_code)
+
+            instance = CustomData.objects.filter(Q(direction='И') & Q(
+                tnved__tnved_code__icontains=search_query_tnved_code)).values(
+                'period', 'tnved__tnved_code', 'tnved__tnved_name').annotate(volume=Sum('price'))
+
+            serializer = CustomDataChartSerializer(instance, many=True)
+            return Response(serializer.data)
+
+        else:
+            print(search_query_tnved_name, "\n", search_query_tnved_code)
+            # по коду можно искать только при полном совпадении, тк иначе можно вбить 0 и выйдет всё
+            instance = CustomData.objects.filter(Q(direction='И') & (
+                    Q(tnved__tnved_name__icontains=search_query_tnved_name) | Q(
+                tnved__tnved_code=search_query_tnved_code))).values(
+                'period', 'tnved__tnved_code', 'tnved__tnved_name').annotate(volume=Sum('price'))
+
+            serializer = CustomDataChartSerializer(instance, many=True)
+            return Response(serializer.data)
 
 
 class SanctionView(viewsets.GenericViewSet,
@@ -92,7 +118,13 @@ class RecommendationView(viewsets.GenericViewSet,
         responses=doc_get_top_recommendation_resp)
     @action(methods=['GET'], detail=False, url_path='top')
     def top_recommendation(self, request, *args, **kargs):
-        instance = Recommendation.objects.prefetch_related('region').filter(region__region_name='Москва').values(
-            'tnved__tnved_code', 'tnved__tnved_name')
+        search_query = request.GET.get('region')
+
+        # print(search_query)
+        #  не поняла зачем здесь prefetch_related поэтому закоментила
+        # instance = Recommendation.objects.prefetch_related("region").filter(region__region_name=search_query).values(
+        #     'tnved__tnved_code', 'tnved__tnved_name', 'region__region_name')
+        instance = Recommendation.objects.filter(region__region_name__icontains=search_query).values(
+            'tnved__tnved_code', 'tnved__tnved_name', 'region__region_name')
         serializer = TopRecommendationSerializer(instance=instance, many=True)
         return Response(serializer.data)

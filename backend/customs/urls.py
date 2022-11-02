@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from customs import views
+from . import views
 
 router = DefaultRouter()
 router.register('unit', views.UnitView, basename='unit')

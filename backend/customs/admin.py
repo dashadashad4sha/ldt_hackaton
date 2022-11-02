@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from customs.models import Unit, Region, Country, CustomData, CustomTnvedCode, FederalDistrict
+from .models import Unit, Region, Country, CustomData, CustomTnvedCode, FederalDistrict
 # Register your models here.
 
 
@@ -27,3 +27,8 @@ class FederalDistrictAdmin(admin.ModelAdmin):
 @admin.register(CustomTnvedCode)
 class CustomTnvedCodeAdmin(admin.ModelAdmin):
     list_display = ['tnved_id', 'tnved_code', 'tnved_name', 'tnved_fee']
+
+
+@admin.register(CustomData)
+class CustomTnvedCodeAdmin(admin.ModelAdmin):
+    list_display = ['tnved', 'direction', 'country', 'period', 'region', 'unit', 'price', 'volume', 'quantity']
