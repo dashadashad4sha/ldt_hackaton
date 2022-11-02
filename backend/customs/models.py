@@ -81,16 +81,6 @@ class CustomData(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
 
-    def get_main_clients(self):
-        with connection.cursor as cursor:
-            cursor.execute(raw_sql.main_customs_partner)
-            columns = [col[0] for col in cursor.description]
-            resp = [
-                dict(zip(columns, row))
-                for row in cursor.fetchall()
-            ]
-
-        return resp
 
 class Sanction(models.Model):
 
