@@ -31,7 +31,7 @@ class FederalDistrictSerializer(serializers.ModelSerializer):
 class TnvedCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomTnvedCode
-        fields = ['tnved_id', 'tnved_code', 'tnved_name', 'parent_tnved']
+        fields = ['tnved_id', 'tnved_code', 'tnved_name']
 
 
 class CustomDataSerializer(serializers.ModelSerializer):
