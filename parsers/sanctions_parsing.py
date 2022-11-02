@@ -2,7 +2,7 @@ import os
 import requests
 from bs4 import BeautifulSoup as BS
 import pandas as pd
-
+# проверка гит
 BASE_DIR = Path(__file__).resolve().parent.parent
 def sanctions_parsing():
     
