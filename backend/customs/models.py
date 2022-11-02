@@ -1,4 +1,6 @@
-from django.db import models
+from django.db import models, connection
+
+from customs import raw_sql
 
 
 class Unit(models.Model):
@@ -79,8 +81,19 @@ class CustomData(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
 
+    def get_main_clients(self):
+        with connection.cursor as cursor:
+            cursor.execute(raw_sql.main_customs_partner)
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+
+        return resp
 
 class Sanction(models.Model):
+
     sanction_id = models.IntegerField(unique=True, blank=False)
     direction = models.CharField(max_length=1)
     country = models.ForeignKey(Country, to_field='country_id', on_delete=models.RESTRICT, related_name='sanctions',

@@ -57,6 +57,11 @@ class TopRecommendationSerializer(serializers.Serializer):
     tnved__tnved_name = serializers.CharField()
 
 
-class CustomDataChartSerializer(serializers.Serializer):
+class CustomsDataChartSerializer(serializers.Serializer):
     period = serializers.DateField(format='%Y.%m.%d')
     volume = serializers.DecimalField(max_digits=15, decimal_places=2)
+
+
+class MainCustomsPartner(serializers.Serializer):
+    country = serializers.CharField()
+    volume_of_trade = serializers.DecimalField(max_digits=20, decimal_places=2)
