@@ -23,3 +23,8 @@ services:
     depends_on:
       - db
     entrypoint: ["sh", "/app/entrypoint.sh"]
+    volumes:
+      - ./log:/app/log
+      - .:/app
+      - ./static:/app/static
+      - ./media:/app/media

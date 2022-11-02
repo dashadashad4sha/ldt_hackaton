@@ -1,0 +1,10 @@
+pgdata/
+venv/
+log/
+db.sqlite3
+docker-compose.*
+Dockerfile
+tests/
+static/
+htmlcov/
+media/
