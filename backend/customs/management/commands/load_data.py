@@ -125,13 +125,12 @@ class Command(BaseCommand):
                         volume=Decimal(rec[3].replace(',', '.')),
                         quantity=Decimal(rec[4].replace(',', '.')),
                     ) for rec in csv_reader)
-                print('create objects')
                 while True:
-                    batch = list(islice(items, 10000))
+                    batch = list(islice(items, 100000))
                     if not batch:
                         break
-                    CustomData.objects.bulk_create(batch, 10000)
-                    print(datetime.datetime.now().strftime('%Y.%d.%m %H:%M:%S'))
+                    CustomData.objects.bulk_create(batch, 100000)
+
 
                 # for chunk in gen_chunks(csv_reader, 100000):
                 #     print(datetime.datetime.now().strftime('%Y:%d:%m %H:%M:%S'))

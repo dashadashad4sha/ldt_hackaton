@@ -1,8 +1,11 @@
 from rest_framework import viewsets, mixins
+from rest_framework.decorators import action
+from django.db.models import Sum
+from rest_framework.response import Response
 
 from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
-    TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer
+    TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, TopRecommendationSerializer
 
 
 class UnitView(viewsets.GenericViewSet,
@@ -52,6 +55,10 @@ class CustomDataView(viewsets.GenericViewSet,
     queryset = CustomData.objects.all()
     serializer_class = CustomDataSerializer
 
+    @action(methods=['GET'], detail=False, url_path='chart/import')
+    def import_char(self, request, *args, **kwargs):
+        queryset = CustomData.objects.filter(direction='И')
+
 
 class SanctionView(viewsets.GenericViewSet,
                    mixins.ListModelMixin,
@@ -67,4 +74,12 @@ class RecommendationView(viewsets.GenericViewSet,
                          ):
     queryset = Recommendation.objects.all()
     serializer_class = RecommendationSerializer
+
+    @action(methods=['GET'], detail=False, url_path='top')
+    def top_recommendation(self, request, *args, **kargs):
+        instance = Recommendation.objects.prefetch_related('region').filter(region__region_name='Москва').values(
+            'tnved__tnved_code', 'tnved__tnved_name')
+        serializer = TopRecommendationSerializer(instance=instance, many=True)
+        return Response(serializer.data)
+
 

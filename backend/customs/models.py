@@ -93,4 +93,5 @@ class Recommendation(models.Model):
     recommendation_id = models.IntegerField(unique=True)
     tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='recommendations',
                               to_field='tnved_id', db_column='recommendation_tnved_id')
-    region = models.ForeignKey(Region, on_delete=models.RESTRICT, related_name='recommendations', to_field='region_id', db_column='recommendation_region_id')
+    region = models.ForeignKey(Region, on_delete=models.RESTRICT, related_name='recommendations', to_field='region_id',
+                               db_column='recommendation_region_id')
