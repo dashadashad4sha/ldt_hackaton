@@ -63,6 +63,17 @@ class CustomTnvedCode(models.Model):
     def __str__(self):
         return f'{self.tnved_code}: {self.tnved_name}'
 
+    # ToDo rewrite to Django ORM
+    def import_export_by_tnved(self, start_date, end_date, code, region, country):
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql.import_export_by_tnved.format(start_date, end_date, code, region, country, start_date, end_date))
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        return resp
+
 
 class CustomData(models.Model):
     tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='custom_data',
@@ -81,6 +92,7 @@ class CustomData(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
 
+    # ToDo rewrite to django ORM
     def get_main_clients(self):
         with connection.cursor() as cursor:
             cursor.execute(raw_sql.main_customs_partner)

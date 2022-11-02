@@ -65,3 +65,9 @@ class CustomsDataChartSerializer(serializers.Serializer):
 class MainCustomsPartner(serializers.Serializer):
     country = serializers.CharField()
     volume_of_trade = serializers.DecimalField(max_digits=20, decimal_places=2)
+
+
+class ImportExportTnvedSerializer(serializers.Serializer):
+    date = serializers.DateField(format='%Y.%m.%d')
+    import_value = serializers.DecimalField(max_digits=20, decimal_places=2)
+    export_value = serializers.DecimalField(max_digits=20, decimal_places=2)

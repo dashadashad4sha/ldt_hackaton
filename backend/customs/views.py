@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
-    TopRecommendationSerializer, CustomsDataChartSerializer, MainCustomsPartner
+    TopRecommendationSerializer, CustomsDataChartSerializer, MainCustomsPartner, ImportExportTnvedSerializer
 
 doc_get_top_recommendation_resp = {
     status.HTTP_200_OK: TopRecommendationSerializer(many=True)
@@ -19,6 +19,10 @@ doc_get_customsdata_chart = {
 
 doc_get_customsdata_main_partner = {
     status.HTTP_200_OK: MainCustomsPartner(many=True)
+}
+
+doc_get_import_export_by_tnved = {
+    status.HTTP_200_OK: ImportExportTnvedSerializer(many=True)
 }
 
 
@@ -60,6 +64,20 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
                           ):
     queryset = CustomTnvedCode.objects.all()
     serializer_class = TnvedCodeSerializer
+
+    @swagger_auto_schema(responses=doc_get_import_export_by_tnved)
+    @action(methods=['GET'], detail=False, url_path='chart/customs-volume/',
+            filterset_fields=['start_date', 'end_date', 'code', 'region', 'country'])
+    def import_export_by_tnved(self, request, *args, **kwargs):
+        start_date = request.query_params('start_date')
+        end_date = request.query_params('end_date')
+        code = request.query_params('code')
+        region = request.query_params('region')
+        country = request.query_params('country')
+
+        instance = CustomTnvedCode.import_export_by_tnved(start_date, end_date, code, region, country)
+        serializer = ImportExportTnvedSerializer(instance, many=True)
+        return Response(serializer.data)
 
 
 class CustomDataView(viewsets.GenericViewSet,
