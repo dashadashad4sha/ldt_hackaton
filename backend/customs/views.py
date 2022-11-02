@@ -64,10 +64,10 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
                           ):
     queryset = CustomTnvedCode.objects.all()
     serializer_class = TnvedCodeSerializer
+    filterset_fields = ['start_date', 'end_date', 'code', 'region', 'country']
 
     @swagger_auto_schema(responses=doc_get_import_export_by_tnved)
-    @action(methods=['GET'], detail=False, url_path='chart/customs-volume/',
-            filterset_fields=['start_date', 'end_date', 'code', 'region', 'country'])
+    @action(methods=['GET'], detail=False, url_path='chart/customs-volume/')
     def import_export_by_tnved(self, request, *args, **kwargs):
         start_date = request.query_params('start_date')
         end_date = request.query_params('end_date')
