@@ -1,11 +1,9 @@
-from django.db import connection
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from django.db.models import Sum
 from rest_framework.response import Response
 
-from customs import raw_sql
 from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
@@ -90,15 +88,9 @@ class CustomDataView(viewsets.GenericViewSet,
     @swagger_auto_schema(responses=doc_get_customsdata_main_partner)
     @action(methods=['GET'], detail=False, url_path='chart/main-partner')
     def export_chart(self, request, *args, **kwargs):
-        with connection.cursor as cursor:
-            cursor.execute(raw_sql.main_customs_partner)
-            columns = [col[0] for col in cursor.description]
-            resp = [
-                dict(zip(columns, row))
-                for row in cursor.fetchall()
-            ]
-        serializer = MainCustomsPartner(resp, many=True)
-        return Response(serializer.deta)
+        instance = CustomData().get_main_clients()
+        serializer = MainCustomsPartner(instance, many=True)
+        return Response(serializer.data)
 
 
 class SanctionView(viewsets.GenericViewSet,
