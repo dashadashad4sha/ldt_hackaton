@@ -85,8 +85,8 @@ class CustomDataView(viewsets.GenericViewSet,
         serializer = CustomsDataChartSerializer(instance, many=True)
         return Response(serializer.deta)
 
-    # @swagger_auto_schema(responses=doc_get_customsdata_main_partner)
-    @action(methods=['GET'], detail=False, url_path='chart/main-partner')
+    @swagger_auto_schema(responses=doc_get_customsdata_main_partner)
+    @action(methods=['GET'], detail=False, url_path='main-partner')
     def export_chart(self, request, *args, **kwargs):
         instance = CustomData().get_main_clients()
         serializer = MainCustomsPartner(instance, many=True)
