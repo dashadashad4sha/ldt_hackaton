@@ -71,9 +71,9 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
     def import_export_by_tnved(self, request, *args, **kwargs):
         start_date = request.query_params.get('start_date')
         end_date = request.query_params.get('end_date')
-        code = request.query_params.get('code')
-        region = request.query_params.get('region')
-        country = request.query_params.get('country')
+        code = f"'{request.query_params.get('code')}'"
+        region = f"'{request.query_params.get('region')}'"
+        country = f"'{request.query_params.get('country')}'"
         # print(start_date, end_date, code, region, country)
         instance = CustomTnvedCode().import_export_by_tnved(start_date, end_date, code, region, country)
         serializer = ImportExportTnvedSerializer(instance, many=True)
