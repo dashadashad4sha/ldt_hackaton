@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from customs.models import Unit, Region, Country, \
+from .models import Unit, Region, Country, \
     FederalDistrict, CustomTnvedCode, CustomData, Sanction, Recommendation
 
 
@@ -44,6 +44,8 @@ class SanctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sanction
         fields = ['sanction_id', 'direction', 'country', 'tnved']
+    # tnved__tnved_code = serializers.CharField()
+    # tnved__tnved_name = serializers.CharField()
 
 
 class RecommendationSerializer(serializers.ModelSerializer):
@@ -55,8 +57,12 @@ class RecommendationSerializer(serializers.ModelSerializer):
 class TopRecommendationSerializer(serializers.Serializer):
     tnved__tnved_code = serializers.CharField()
     tnved__tnved_name = serializers.CharField()
+    region__region_name = serializers.CharField()
 
 
 class CustomDataChartSerializer(serializers.Serializer):
     period = serializers.DateField(format='%Y.%m.%d')
     volume = serializers.DecimalField(max_digits=15, decimal_places=2)
+    tnved__tnved_code = serializers.CharField()
+    tnved__tnved_name = serializers.CharField()
+
