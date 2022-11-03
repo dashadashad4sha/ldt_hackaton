@@ -78,7 +78,7 @@ customs_partner_by_tnved = (
                             "from all_filters_data afd\n"
                             "where afd.direction like 'Э'\n"
                             "group by 1)\n"
-                            "select distinct afd.country_name,\n"
+                            "select distinct afd.country_name as country_name,\n"
                             "		   coalesce(ai.tnved_import, 0) as import_volume,\n"
                             "		   coalesce(ae.tnved_export, 0) as export_volume,\n"
                             "		   coalesce(ai.tnved_import, 0) + coalesce(ae.tnved_export, 0) as trade_volume\n"
