@@ -26,6 +26,10 @@ doc_get_import_export_by_tnved = {
     status.HTTP_200_OK: ImportExportTnvedSerializer(many=True)
 }
 
+doc_get_customs_partner_by_tnved = {
+status.HTTP_200_OK: PartnerByTnvedSerializer(many=True)
+}
+
 
 class UnitView(viewsets.GenericViewSet,
                mixins.ListModelMixin,
@@ -101,6 +105,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
         serializer = ImportExportTnvedSerializer(instance, many=True)
         return Response(serializer.data)
 
+    @swagger_auto_schema(responses=doc_get_customs_partner_by_tnved)
     @action(methods=['GET'], detail=False, url_path='chart/customs-partner')
     def customs_partner_by_tnved(self, request, *args, **kwargs):
         start_date = request.query_params.get('start_date')
@@ -123,7 +128,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
         else:
             region_filter = ''
 
-        instance = self.customs_partner_by_tnved(period_1, region_filter, code_filter)
+        instance = CustomTnvedCode().customs_partner_by_tnved(period_1, region_filter, code_filter)
         serializer = PartnerByTnvedSerializer(instance)
         return Response(serializer.data)
 
