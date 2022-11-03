@@ -88,7 +88,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
             period_2 = "where cc.period between '2019-01-01' and '2021-12-31'"
 
         if code:
-            code_filter = f"and (ctc.tnved_code like '{code}') "
+            code_filter = f"and (ctc.tnved_code like '{code}%') "
         else:
             code_filter = ''
 
@@ -119,7 +119,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
             period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
 
         if code:
-            code_filter = f"and (ctc.tnved_code like '{code}') "
+            code_filter = f"and (ctc.tnved_code like '{code}%') "
         else:
             code_filter = ''
 
@@ -129,7 +129,6 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
             region_filter = ''
 
         instance = CustomTnvedCode().customs_partner_by_tnved(period_1, region_filter, code_filter)
-        print(instance)
         serializer = PartnerByTnvedSerializer(instance, many=True)
         return Response(serializer.data)
 
