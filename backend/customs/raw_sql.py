@@ -113,7 +113,7 @@ sanction_goods_volume_by_region = ("with all_filters_data as (\n"
                                    "from all_filters_data afd\n"
                                    "where sanction_id = -1\n"
                                    "group by 1)\n"
-                                   "select si.tnved_code tnved_code, si.sanction_sum sanction_sum, nsi.non_sanction_sum non_sanction_sum\n"
+                                   "select si.tnved_code code, si.sanction_sum sanction_sum, nsi.non_sanction_sum non_sanction_sum\n"
                                    "from sanctions_import si\n"
                                    "join non_sanctions_import nsi\n"
                                    "on si.tnved_code = nsi.tnved_code;")
