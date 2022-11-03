@@ -129,6 +129,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
             region_filter = ''
 
         instance = CustomTnvedCode().customs_partner_by_tnved(period_1, region_filter, code_filter)
+        print(instance)
         serializer = PartnerByTnvedSerializer(instance)
         return Response(serializer.data)
 
