@@ -89,8 +89,8 @@ class CustomTnvedCode(models.Model):
     # ToDO rewrite to Django ORM
     def clear_import(self, period, code_filter, region_filter):
         with connection.cursor() as cursor:
-            print(raw_sql.clear_import_by_tnved.format(period, code_filter, region_filter))
-            cursor.execute(raw_sql.clear_import_by_tnved.format(period, code_filter, region_filter))
+            print(raw_sql.clear_import.format(period, code_filter, region_filter))
+            cursor.execute(raw_sql.clear_import.format(period, code_filter, region_filter))
             columns = [col[0] for col in cursor.description]
             resp = [
                 dict(zip(columns, row))
