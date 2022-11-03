@@ -8,7 +8,7 @@ from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistri
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
     TopRecommendationSerializer, CustomsDataChartSerializer, MainCustomsPartner, ImportExportTnvedSerializer, \
-    PartnerByTnvedSerializer, SanctionGoodsVolume
+    PartnerByTnvedSerializer, SanctionGoodsVolume, ClearImportByTnved
 
 doc_get_top_recommendation_resp = {
     status.HTTP_200_OK: TopRecommendationSerializer(many=True)
@@ -27,12 +27,17 @@ doc_get_import_export_by_tnved = {
 }
 
 doc_get_customs_partner_by_tnved = {
-status.HTTP_200_OK: PartnerByTnvedSerializer(many=True)
+    status.HTTP_200_OK: PartnerByTnvedSerializer(many=True)
 }
 
 doc_sanction_goods_volume_by_region = {
-status.HTTP_200_OK: SanctionGoodsVolume(many=True)
+    status.HTTP_200_OK: SanctionGoodsVolume(many=True)
 }
+
+doc_clear_import = {
+    status.HTTP_200_OK: ClearImportByTnved(many=True)
+}
+
 
 class UnitView(viewsets.GenericViewSet,
                mixins.ListModelMixin,
@@ -104,7 +109,8 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
             country_filter = f"and ccn.country_name like '{country}'"
         else:
             country_filter = ''
-        instance = CustomTnvedCode().import_export_by_tnved(period_1, period_2, code_filter, region_filter, country_filter)
+        instance = CustomTnvedCode().import_export_by_tnved(period_1, period_2, code_filter, region_filter,
+                                                            country_filter)
         serializer = ImportExportTnvedSerializer(instance, many=True)
         return Response(serializer.data)
 
@@ -133,6 +139,33 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
 
         instance = CustomTnvedCode().customs_partner_by_tnved(period_1, region_filter, code_filter)
         serializer = PartnerByTnvedSerializer(instance, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(responses=doc_clear_import)
+    @action(methods=['GET'], detail=False, url_path='clera-import')
+    def clear_import(self, request, *args, **kwargs):
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+
+        if start_date and end_date:
+            period_1 = f'where (cc.period between {start_date} and {end_date}) '
+        else:
+            period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
+
+        if code:
+            code_filter = f"and (ctc.tnved_code like '{code}%') "
+        else:
+            code_filter = ''
+
+        if region:
+            region_filter = f"and cr.region_name like '{region}' "
+        else:
+            region_filter = ''
+
+        instance = CustomTnvedCode().clear_import(period_1, region_filter, code_filter)
+        serializer = ClearImportByTnved(instance, many=True)
         return Response(serializer.data)
 
 
@@ -194,7 +227,6 @@ class SanctionView(viewsets.GenericViewSet,
         instance = Sanction().sanction_goods_volume_by_region(region=region_filter, code=code_filter)
         serializer = SanctionGoodsVolume(instance, many=True)
         return Response(serializer.data)
-
 
 
 class RecommendationView(viewsets.GenericViewSet,

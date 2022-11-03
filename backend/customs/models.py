@@ -86,6 +86,17 @@ class CustomTnvedCode(models.Model):
             ]
         return resp
 
+    # ToDO rewrite to Django ORM
+    def clear_import(self, period, code_filter, region_filter):
+        with connection.cursor() as cursor:
+            print(raw_sql.clear_import_by_tnved.format(period, code_filter, region_filter))
+            cursor.execute(raw_sql.clear_import_by_tnved.format(period, code_filter, region_filter))
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        return resp
 
 class CustomData(models.Model):
     tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='custom_data',
@@ -125,6 +136,7 @@ class Sanction(models.Model):
     tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='sanctions',
                               db_column='sanction_tnved_id')
 
+    # ToDo rewrite to Django ORM
     def sanction_goods_volume_by_region(self, region, code):
         with connection.cursor() as cursor:
             cursor.execute(raw_sql.sanction_goods_volume_by_region.format(region, code))
