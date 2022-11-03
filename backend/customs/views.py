@@ -78,7 +78,6 @@ class CustomDataView(viewsets.GenericViewSet,
             search_query_tnved_code = 0
 
         if not search_query_tnved_name:
-            print(search_query_tnved_name, "\n", search_query_tnved_code)
 
             instance = CustomData.objects.filter(Q(direction='И') & Q(
                 tnved__tnved_code__icontains=search_query_tnved_code)).values(
@@ -88,10 +87,8 @@ class CustomDataView(viewsets.GenericViewSet,
             return Response(serializer.data)
 
         else:
-            print(search_query_tnved_name, "\n", search_query_tnved_code)
-            # по коду можно искать только при полном совпадении, тк иначе можно вбить 0 и выйдет всё
             instance = CustomData.objects.filter(Q(direction='И') & (
-                    Q(tnved__tnved_name__icontains=search_query_tnved_name) | Q(
+                    Q(tnved__tnved_name__iregex=search_query_tnved_name) | Q(
                 tnved__tnved_code=search_query_tnved_code))).values(
                 'period', 'tnved__tnved_code', 'tnved__tnved_name').annotate(volume=Sum('price'))
 
@@ -119,12 +116,7 @@ class RecommendationView(viewsets.GenericViewSet,
     @action(methods=['GET'], detail=False, url_path='top')
     def top_recommendation(self, request, *args, **kargs):
         search_query = request.GET.get('region')
-
-        # print(search_query)
-        #  не поняла зачем здесь prefetch_related поэтому закоментила
-        # instance = Recommendation.objects.prefetch_related("region").filter(region__region_name=search_query).values(
-        #     'tnved__tnved_code', 'tnved__tnved_name', 'region__region_name')
-        instance = Recommendation.objects.filter(region__region_name__icontains=search_query).values(
+        instance = Recommendation.objects.filter(region__region_name__iregex=search_query).values(
             'tnved__tnved_code', 'tnved__tnved_name', 'region__region_name')
         serializer = TopRecommendationSerializer(instance=instance, many=True)
         return Response(serializer.data)
