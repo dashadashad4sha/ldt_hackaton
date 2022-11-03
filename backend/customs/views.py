@@ -130,7 +130,7 @@ class ExportToExelView(viewsets.GenericViewSet,
                        mixins.ListModelMixin,
                        mixins.RetrieveModelMixin
                        ):
-    queryset = CustomData.objects.all()
+    queryset = ExportToExel.objects.all()
     serializer_class = ExportToExelSerializer
 
     @swagger_auto_schema(
