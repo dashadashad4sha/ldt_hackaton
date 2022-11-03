@@ -7,17 +7,21 @@ from rest_framework.response import Response
 
 from django.db.models import Q
 
-from .models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
+from .models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction, ExportToExel
 from .serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
-    TopRecommendationSerializer, CustomDataChartSerializer
+    TopRecommendationSerializer, CustomsDataChartSerializer, ExportToExelSerializer
 
 doc_get_top_recommendation_resp = {
     status.HTTP_200_OK: TopRecommendationSerializer(many=True)
 }
 
 doc_get_customdata_chart = {
-    status.HTTP_200_OK: CustomDataChartSerializer(many=True)
+    status.HTTP_200_OK: CustomsDataChartSerializer(many=True)
+}
+
+doc_get_exp_to_xls_resp = {
+    status.HTTP_200_OK: ExportToExelSerializer(many=True)
 }
 
 
@@ -83,7 +87,7 @@ class CustomDataView(viewsets.GenericViewSet,
                 tnved__tnved_code__icontains=search_query_tnved_code)).values(
                 'period', 'tnved__tnved_code', 'tnved__tnved_name').annotate(volume=Sum('price'))
 
-            serializer = CustomDataChartSerializer(instance, many=True)
+            serializer = CustomsDataChartSerializer(instance, many=True)
             return Response(serializer.data)
 
         else:
@@ -92,7 +96,7 @@ class CustomDataView(viewsets.GenericViewSet,
                 tnved__tnved_code=search_query_tnved_code))).values(
                 'period', 'tnved__tnved_code', 'tnved__tnved_name').annotate(volume=Sum('price'))
 
-            serializer = CustomDataChartSerializer(instance, many=True)
+            serializer = CustomsDataChartSerializer(instance, many=True)
             return Response(serializer.data)
 
 
@@ -120,3 +124,78 @@ class RecommendationView(viewsets.GenericViewSet,
             'tnved__tnved_code', 'tnved__tnved_name', 'region__region_name')
         serializer = TopRecommendationSerializer(instance=instance, many=True)
         return Response(serializer.data)
+
+
+class ExportToExelView(viewsets.GenericViewSet,
+                       mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin
+                       ):
+    queryset = CustomData.objects.all()
+    serializer_class = ExportToExelSerializer
+
+    @swagger_auto_schema(
+        responses=doc_get_exp_to_xls_resp)
+    @action(methods=['GET'], detail=False, url_path='export-to-csv')
+    def export_to_exel(self, request, *args, **kargs):
+        # import_value = request.query_params.get('import_value')
+        # if not import_value:
+        import_value = f"select coalesce(round(sum(cc.price) / 1e3, 2), 0)"
+        f"from customs_customdata cc "
+        f"join customs_customtnvedcode ctc "
+        f"on cc.custom_data_tnved_id = ctc.tnved_id "
+        f"join customs_region cr  "
+        f"on cc.custom_data_region_id = cr.region_id"
+        f"where (cc.period between '2019-01-01' and '2021-12-31') and "
+        f"ctc.tnved_code like '8414805900' and "
+        f"cr.region_name like 'Москва' and"
+        f"cc.direction like 'И';"
+        instance = ExportToExel().export_to_exel(import_value)
+        print(instance)
+        serializer = ExportToExelSerializer(instance, many=True)
+        return Response(serializer.data)
+
+        # export_value = 0
+        # clean_exp_imp = 0
+        # clean_exp_imp_del = 0
+        # main_partners = []
+        # customs_duties = 0
+        # sanctions = []
+        # potential_volume = 0
+        # del_import = 0
+        # rows = CustomData.objects.all().values_list('tnved', 'tnved__tnved_name', 'import_value', 'export_value',
+        #                                             'clean_exp_imp', 'clean_exp_imp_del', 'main_partners',
+        #                                             'customs_duties', 'sanctions', 'potential_volume', 'del_import')
+
+        rows = [import_value]
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="test.xls"'
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Test')
+
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+
+        # columns = ['tnved', 'tnved__tnved_name', 'объём импорта', 'объём экспорта', "чистый импорт/экспорт",
+        #            "Изменение чистого импорта", "Основные партнеры по импорту", "Таможенные пошлины на импорт",
+        #            "Наличие ограничений на импорт", "Потенциальный объем ниши", "Выбывающий импорт из-за санкций",
+        #            "Рост ниши за год"]
+        columns = ['объём импорта']
+
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+
+        for row in rows:
+            row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+
+        wb.save(response)
+
+        return response

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Unit, Region, Country, \
+from customs.models import Unit, Region, Country, \
     FederalDistrict, CustomTnvedCode, CustomData, Sanction, Recommendation
 
 
@@ -31,7 +31,7 @@ class FederalDistrictSerializer(serializers.ModelSerializer):
 class TnvedCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomTnvedCode
-        fields = ['tnved_id', 'tnved_code', 'tnved_name', 'parent_tnved']
+        fields = ['tnved_id', 'tnved_code', 'tnved_name']
 
 
 class CustomDataSerializer(serializers.ModelSerializer):
@@ -44,8 +44,6 @@ class SanctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sanction
         fields = ['sanction_id', 'direction', 'country', 'tnved']
-    # tnved__tnved_code = serializers.CharField()
-    # tnved__tnved_name = serializers.CharField()
 
 
 class RecommendationSerializer(serializers.ModelSerializer):
@@ -57,12 +55,33 @@ class RecommendationSerializer(serializers.ModelSerializer):
 class TopRecommendationSerializer(serializers.Serializer):
     tnved__tnved_code = serializers.CharField()
     tnved__tnved_name = serializers.CharField()
-    region__region_name = serializers.CharField()
 
 
-class CustomDataChartSerializer(serializers.Serializer):
+class CustomsDataChartSerializer(serializers.Serializer):
     period = serializers.DateField(format='%Y.%m.%d')
     volume = serializers.DecimalField(max_digits=15, decimal_places=2)
+
+
+class MainCustomsPartner(serializers.Serializer):
+    country = serializers.CharField()
+    volume_of_trade = serializers.DecimalField(max_digits=20, decimal_places=2)
+
+
+class ImportExportTnvedSerializer(serializers.Serializer):
+    date = serializers.DateField(format='%Y.%m.%d')
+    import_value = serializers.DecimalField(max_digits=20, decimal_places=2)
+    export_value = serializers.DecimalField(max_digits=20, decimal_places=2)
+
+
+class PartnerByTnvedSerializer(serializers.Serializer):
+    country = serializers.CharField()
+    import_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
+    export_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
+    trade_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
+
+class ExportToExelSerializer(serializers.Serializer):
+    import_value = serializers.DecimalField(max_digits=20, decimal_places=2)
+    export_value = serializers.DecimalField(max_digits=20, decimal_places=2)
     tnved__tnved_code = serializers.CharField()
     tnved__tnved_name = serializers.CharField()
 
