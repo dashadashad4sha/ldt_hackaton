@@ -57,31 +57,6 @@ class TopRecommendationSerializer(serializers.Serializer):
     tnved__tnved_name = serializers.CharField()
 
 
-class CustomsDataChartSerializer(serializers.Serializer):
+class CustomDataChartSerializer(serializers.Serializer):
     period = serializers.DateField(format='%Y.%m.%d')
     volume = serializers.DecimalField(max_digits=15, decimal_places=2)
-
-
-class MainCustomsPartner(serializers.Serializer):
-    country = serializers.CharField()
-    volume_of_trade = serializers.DecimalField(max_digits=20, decimal_places=2)
-
-
-class ImportExportTnvedSerializer(serializers.Serializer):
-    date = serializers.DateField(format='%Y.%m.%d')
-    import_value = serializers.DecimalField(max_digits=20, decimal_places=2)
-    export_value = serializers.DecimalField(max_digits=20, decimal_places=2)
-
-
-class PartnerByTnvedSerializer(serializers.Serializer):
-    country = serializers.CharField()
-    import_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
-    export_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
-    trade_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
-
-class ExportToExelSerializer(serializers.Serializer):
-    import_value = serializers.DecimalField(max_digits=20, decimal_places=2)
-    export_value = serializers.DecimalField(max_digits=20, decimal_places=2)
-    tnved__tnved_code = serializers.CharField()
-    tnved__tnved_name = serializers.CharField()
-
