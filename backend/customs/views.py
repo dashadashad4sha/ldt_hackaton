@@ -7,10 +7,10 @@ from rest_framework.response import Response
 
 from django.db.models import Q
 
-from .models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction, ExportToExel
+from .models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction #, ExportToExel
 from .serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
-    TopRecommendationSerializer, CustomsDataChartSerializer, ExportToExelSerializer
+    TopRecommendationSerializer, CustomsDataChartSerializer #, ExportToExelSerializer
 
 doc_get_top_recommendation_resp = {
     status.HTTP_200_OK: TopRecommendationSerializer(many=True)
@@ -20,9 +20,9 @@ doc_get_customdata_chart = {
     status.HTTP_200_OK: CustomsDataChartSerializer(many=True)
 }
 
-doc_get_exp_to_xls_resp = {
-    status.HTTP_200_OK: ExportToExelSerializer(many=True)
-}
+# doc_get_exp_to_xls_resp = {
+#     status.HTTP_200_OK: ExportToExelSerializer(many=True)
+# }
 
 
 class UnitView(viewsets.GenericViewSet,
@@ -99,6 +99,27 @@ class CustomDataView(viewsets.GenericViewSet,
             serializer = CustomsDataChartSerializer(instance, many=True)
             return Response(serializer.data)
 
+    @swagger_auto_schema(
+        responses=doc_get_customdata_chart)
+    @action(methods=['GET'], detail=False, url_path='export-to-xls')
+    def export_to_exel(self, request, *args, **kargs):
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+        if code:
+            code_filter = f"and (ctc.tnved_code like '{code}%') "
+        else:
+            code_filter = ''
+
+        if region:
+            region_filter = f"and cr.region_name like '{region}' "
+        else:
+            region_filter = ''
+
+        instance = CustomData().export_to_exel(code_filter, region_filter)
+        serializer = CustomsDataChartSerializer(instance, many=True)
+        print(serializer.data)
+        return Response(serializer.data)
+
 
 class SanctionView(viewsets.GenericViewSet,
                    mixins.ListModelMixin,
@@ -126,33 +147,33 @@ class RecommendationView(viewsets.GenericViewSet,
         return Response(serializer.data)
 
 
-class ExportToExelView(viewsets.GenericViewSet,
-                       mixins.ListModelMixin,
-                       mixins.RetrieveModelMixin
-                       ):
-    queryset = ExportToExel.objects.all()
-    serializer_class = ExportToExelSerializer
-
-    @swagger_auto_schema(
-        responses=doc_get_exp_to_xls_resp)
-    @action(methods=['GET'], detail=False, url_path='export-to-xls')
-    def export_to_exel(self, request, *args, **kargs):
-        code = request.query_params.get('code')
-        region = request.query_params.get('region')
-        if code:
-            code_filter = f"and (ctc.tnved_code like '{code}%') "
-        else:
-            code_filter = ''
-
-        if region:
-            region_filter = f"and cr.region_name like '{region}' "
-        else:
-            region_filter = ''
-
-        instance = ExportToExel().export_to_exel(code_filter, region_filter)
-        serializer = ExportToExelSerializer(instance, many=True)
-        return Response(serializer.data)
-
+# class ExportToExelView(viewsets.GenericViewSet,
+#                        mixins.ListModelMixin,
+#                        mixins.RetrieveModelMixin
+#                        ):
+#     queryset = ExportToExel.objects.all()
+#     serializer_class = ExportToExelSerializer
+#
+#     @swagger_auto_schema(
+#         responses=doc_get_exp_to_xls_resp)
+#     @action(methods=['GET'], detail=False, url_path='export-to-xls')
+#     def export_to_exel(self, request, *args, **kargs):
+#         code = request.query_params.get('code')
+#         region = request.query_params.get('region')
+#         if code:
+#             code_filter = f"and (ctc.tnved_code like '{code}%') "
+#         else:
+#             code_filter = ''
+#
+#         if region:
+#             region_filter = f"and cr.region_name like '{region}' "
+#         else:
+#             region_filter = ''
+#
+#         instance = ExportToExel().export_to_exel(code_filter, region_filter)
+#         serializer = ExportToExelSerializer(instance, many=True)
+#         return Response(serializer.data)
+#
 
 
 

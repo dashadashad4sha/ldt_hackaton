@@ -10,5 +10,5 @@ router.register('federal-district', views.FederalDistrictView, basename='federal
 router.register('custom-data', views.CustomDataView, basename='custom-data')
 router.register('sanction', views.SanctionView, basename='sanction')
 router.register('recommendation', views.RecommendationView, basename='recommendation')
-router.register('export-to-exel', views.ExportToExelView, basename='export-to-exel')
+# router.register('export-to-exel', views.ExportToExelView, basename='export-to-exel')
 urlpatterns = router.urls
