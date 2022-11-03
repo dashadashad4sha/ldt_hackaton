@@ -97,3 +97,25 @@ class Recommendation(models.Model):
                               to_field='tnved_id', db_column='recommendation_tnved_id')
     region = models.ForeignKey(Region, on_delete=models.RESTRICT, related_name='recommendations', to_field='region_id',
                                db_column='recommendation_region_id')
+
+
+class ExportToExel(models.Model):
+    tnved_id = models.IntegerField(unique=True, blank=False)
+    tnved_code = models.CharField(max_length=400)
+    tnved_name = models.CharField(max_length=400)
+    tnved_fee = models.CharField(max_length=200, null=True)
+    create_time = models.DateTimeField(auto_now_add=True)
+    modification_time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.tnved_code}: {self.tnved_name}'
+
+    def export_to_exel(self, import_value):
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql.import_export_by_tnved.format(import_value))
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        return resp
