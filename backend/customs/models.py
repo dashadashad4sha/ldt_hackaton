@@ -54,7 +54,7 @@ class Region(models.Model):
 
 class CustomTnvedCode(models.Model):
     tnved_id = models.IntegerField(unique=True, blank=False)
-    tnved_code = models.BigIntegerField()
+    tnved_code = models.CharField(max_length=400)
     tnved_name = models.CharField(max_length=400)
     tnved_fee = models.CharField(max_length=200, null=True)
     create_time = models.DateTimeField(auto_now_add=True)
@@ -62,6 +62,28 @@ class CustomTnvedCode(models.Model):
 
     def __str__(self):
         return f'{self.tnved_code}: {self.tnved_name}'
+
+    # ToDo rewrite to Django ORM
+    def import_export_by_tnved(self, period_1, period_2, code_filter, region_filter, country_filter):
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql.import_export_by_tnved.format(period_1, code_filter, region_filter, country_filter,  period_2))
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        return resp
+
+    def customs_partner_by_tnved(self, period, code_filter, region_filter):
+        with connection.cursor() as cursor:
+            print(raw_sql.customs_partner_by_tnved.format(period, code_filter, region_filter))
+            cursor.execute(raw_sql.customs_partner_by_tnved.format(period, code_filter, region_filter))
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        return resp
 
 
 class CustomData(models.Model):
@@ -80,6 +102,17 @@ class CustomData(models.Model):
     quantity = models.DecimalField(max_digits=20, decimal_places=2)
     create_time = models.DateTimeField(auto_now_add=True)
     modification_time = models.DateTimeField(auto_now=True)
+    
+        def get_main_clients(self):
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql.main_customs_partner)
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+
+        return resp
 
 
 class Sanction(models.Model):
