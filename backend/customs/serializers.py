@@ -78,3 +78,9 @@ class PartnerByTnvedSerializer(serializers.Serializer):
     import_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
     export_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
     trade_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
+
+
+class SanctionGoodsVolume(serializers.Serializer):
+    code = serializers.CharField()
+    sanction_sum = serializers.DecimalField(max_digits=20, decimal_places=2)
+    non_sanction_sum = serializers.DecimalField(max_digits=20, decimal_places=2)

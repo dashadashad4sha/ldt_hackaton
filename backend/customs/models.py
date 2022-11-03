@@ -66,7 +66,8 @@ class CustomTnvedCode(models.Model):
     # ToDo rewrite to Django ORM
     def import_export_by_tnved(self, period_1, period_2, code_filter, region_filter, country_filter):
         with connection.cursor() as cursor:
-            cursor.execute(raw_sql.import_export_by_tnved.format(period_1, code_filter, region_filter, country_filter,  period_2))
+            cursor.execute(
+                raw_sql.import_export_by_tnved.format(period_1, code_filter, region_filter, country_filter, period_2))
             columns = [col[0] for col in cursor.description]
             resp = [
                 dict(zip(columns, row))
@@ -74,9 +75,9 @@ class CustomTnvedCode(models.Model):
             ]
         return resp
 
+    # ToDO rewrite to Django ORM
     def customs_partner_by_tnved(self, period, code_filter, region_filter):
         with connection.cursor() as cursor:
-            print(raw_sql.customs_partner_by_tnved.format(period, code_filter, region_filter))
             cursor.execute(raw_sql.customs_partner_by_tnved.format(period, code_filter, region_filter))
             columns = [col[0] for col in cursor.description]
             resp = [
@@ -84,8 +85,6 @@ class CustomTnvedCode(models.Model):
                 for row in cursor.fetchall()
             ]
         return resp
-
-
 
 
 class CustomData(models.Model):
@@ -117,14 +116,24 @@ class CustomData(models.Model):
 
         return resp
 
-class Sanction(models.Model):
 
+class Sanction(models.Model):
     sanction_id = models.IntegerField(unique=True, blank=False)
     direction = models.CharField(max_length=1)
     country = models.ForeignKey(Country, to_field='country_id', on_delete=models.RESTRICT, related_name='sanctions',
                                 db_column='sanction_country_id')
     tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='sanctions',
                               db_column='sanction_tnved_id')
+
+    def sanction_goods_volume_by_region(self, region, code):
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql.sanction_goods_volume_by_region.format(region, code))
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        return resp
 
 
 class Recommendation(models.Model):

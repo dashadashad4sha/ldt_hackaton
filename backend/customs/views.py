@@ -8,7 +8,7 @@ from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistri
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
     TopRecommendationSerializer, CustomsDataChartSerializer, MainCustomsPartner, ImportExportTnvedSerializer, \
-    PartnerByTnvedSerializer
+    PartnerByTnvedSerializer, SanctionGoodsVolume
 
 doc_get_top_recommendation_resp = {
     status.HTTP_200_OK: TopRecommendationSerializer(many=True)
@@ -30,6 +30,9 @@ doc_get_customs_partner_by_tnved = {
 status.HTTP_200_OK: PartnerByTnvedSerializer(many=True)
 }
 
+doc_sanction_goods_volume_by_region = {
+status.HTTP_200_OK: SanctionGoodsVolume(many=True)
+}
 
 class UnitView(viewsets.GenericViewSet,
                mixins.ListModelMixin,
@@ -171,6 +174,26 @@ class SanctionView(viewsets.GenericViewSet,
                    ):
     queryset = Sanction.objects.all()
     serializer_class = SanctionSerializer
+
+    @action(methods=['GET'], detail=False, url_path='goods-volume')
+    def sanction_goods_volume_by_region(self, request, *args, **kwargs):
+        region = request.query_params.get('region')
+        code = request.query_params.get('code')
+
+        if code:
+            code_filter = f"and (ctc.tnved_code like '{code}%') "
+        else:
+            code_filter = ''
+
+        if region:
+            region_filter = f"and cr.region_name like '{region}' "
+        else:
+            region_filter = ''
+
+        instance = Sanction().sanction_goods_volume_by_region(region, code)
+        serializer = SanctionGoodsVolume(instance, many=True)
+        return Response(serializer.data)
+
 
 
 class RecommendationView(viewsets.GenericViewSet,
