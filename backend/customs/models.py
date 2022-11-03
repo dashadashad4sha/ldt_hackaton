@@ -111,10 +111,10 @@ class ExportToExel(models.Model):
     def __str__(self):
         return f'{self.tnved_code}: {self.tnved_name}'
 
-    # ToDo rewrite to Django ORM
-    def export_to_exel(self, import_value):
+    def export_to_exel(self, code_filter, region_filter):
         with connection.cursor() as cursor:
-            cursor.execute(raw_sql.import_export_by_tnved.format(import_value))
+            cursor.execute(
+                raw_sql.import_value.format(code_filter, region_filter))
             columns = [col[0] for col in cursor.description]
             resp = [
                 dict(zip(columns, row))
