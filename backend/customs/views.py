@@ -135,7 +135,7 @@ class ExportToExelView(viewsets.GenericViewSet,
 
     @swagger_auto_schema(
         responses=doc_get_exp_to_xls_resp)
-    @action(methods=['GET'], detail=False, url_path='export-to-csv')
+    @action(methods=['GET'], detail=False, url_path='export-to-xls')
     def export_to_exel(self, request, *args, **kargs):
         code = request.query_params.get('code')
         region = request.query_params.get('region')

@@ -1,7 +1,7 @@
 from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models, connection
-from customs import raw_sql
+from . import raw_sql
 
 
 class Unit(models.Model):

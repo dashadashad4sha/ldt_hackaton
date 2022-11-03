@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from customs.models import Unit, Region, Country, \
+from .models import Unit, Region, Country, \
     FederalDistrict, CustomTnvedCode, CustomData, Sanction, Recommendation
 
 
@@ -78,6 +78,7 @@ class PartnerByTnvedSerializer(serializers.Serializer):
     import_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
     export_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
     trade_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
+
 
 class ExportToExelSerializer(serializers.Serializer):
     import_value = serializers.DecimalField(max_digits=20, decimal_places=2)
