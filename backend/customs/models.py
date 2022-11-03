@@ -64,9 +64,9 @@ class CustomTnvedCode(models.Model):
         return f'{self.tnved_code}: {self.tnved_name}'
 
     # ToDo rewrite to Django ORM
-    def import_export_by_tnved(self, start_date, end_date, code, region, country):
+    def import_export_by_tnved(self, period_1, period_2, code_filter, region_filter, country_filter):
         with connection.cursor() as cursor:
-            cursor.execute(raw_sql.import_export_by_tnved.format(start_date, end_date, code, region, country, start_date, end_date))
+            cursor.execute(raw_sql.import_export_by_tnved.format(period_1, code_filter, region_filter, country_filter,  period_2))
             columns = [col[0] for col in cursor.description]
             resp = [
                 dict(zip(columns, row))
