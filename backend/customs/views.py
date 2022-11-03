@@ -175,6 +175,7 @@ class SanctionView(viewsets.GenericViewSet,
     queryset = Sanction.objects.all()
     serializer_class = SanctionSerializer
 
+    @swagger_auto_schema(responses=doc_sanction_goods_volume_by_region)
     @action(methods=['GET'], detail=False, url_path='goods-volume')
     def sanction_goods_volume_by_region(self, request, *args, **kwargs):
         region = request.query_params.get('region')
@@ -190,7 +191,7 @@ class SanctionView(viewsets.GenericViewSet,
         else:
             region_filter = ''
 
-        instance = Sanction().sanction_goods_volume_by_region(region, code)
+        instance = Sanction().sanction_goods_volume_by_region(region=region_filter, code=code_filter)
         serializer = SanctionGoodsVolume(instance, many=True)
         return Response(serializer.data)
 
