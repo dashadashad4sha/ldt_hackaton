@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
-    TopRecommendationSerializer, CustomsDataChartSerializer, MainCustomsPartner, ImportExportTnvedSerializer
+    TopRecommendationSerializer, CustomsDataChartSerializer, MainCustomsPartner, ImportExportTnvedSerializer, \
+    PartnerByTnvedSerializer
 
 doc_get_top_recommendation_resp = {
     status.HTTP_200_OK: TopRecommendationSerializer(many=True)
@@ -71,6 +72,9 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
     def import_export_by_tnved(self, request, *args, **kwargs):
         start_date = request.query_params.get('start_date')
         end_date = request.query_params.get('end_date')
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+        country = request.query_params.get('country')
 
         if start_date and end_date:
             period_1 = f'where (cc.period between {start_date} and {end_date}) '
@@ -78,17 +82,17 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
         else:
             period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
             period_2 = "where cc.period between '2019-01-01' and '2021-12-31'"
-        code = request.query_params.get('code')
+
         if code:
             code_filter = f"and (ctc.tnved_code like '{code}') "
         else:
             code_filter = ''
-        region = request.query_params.get('region')
+
         if region:
             region_filter = f"and cr.region_name like '{region}' "
         else:
             region_filter = ''
-        country = request.query_params.get('country')
+
         if country:
             country_filter = f"and ccn.country_name like '{country}'"
         else:
@@ -96,6 +100,33 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
         instance = CustomTnvedCode().import_export_by_tnved(period_1, period_2, code_filter, region_filter, country_filter)
         serializer = ImportExportTnvedSerializer(instance, many=True)
         return Response(serializer.data)
+
+    @action(methods=['GET'], detail=False, url_path='chart/customs-partner')
+    def customs_partner_by_tnved(self, request, *args, **kwargs):
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+
+        if start_date and end_date:
+            period_1 = f'where (cc.period between {start_date} and {end_date}) '
+        else:
+            period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
+
+        if code:
+            code_filter = f"and (ctc.tnved_code like '{code}') "
+        else:
+            code_filter = ''
+
+        if region:
+            region_filter = f"and cr.region_name like '{region}' "
+        else:
+            region_filter = ''
+
+        instance = self.customs_partner_by_tnved(period_1, region_filter, code_filter)
+        serializer = PartnerByTnvedSerializer(instance)
+        return Response(serializer.data)
+
 
 
 class CustomDataView(viewsets.GenericViewSet,

@@ -66,7 +66,6 @@ class CustomTnvedCode(models.Model):
     # ToDo rewrite to Django ORM
     def import_export_by_tnved(self, period_1, period_2, code_filter, region_filter, country_filter):
         with connection.cursor() as cursor:
-            print(raw_sql.import_export_by_tnved.format(period_1, code_filter, region_filter, country_filter,  period_2))
             cursor.execute(raw_sql.import_export_by_tnved.format(period_1, code_filter, region_filter, country_filter,  period_2))
             columns = [col[0] for col in cursor.description]
             resp = [
@@ -74,6 +73,18 @@ class CustomTnvedCode(models.Model):
                 for row in cursor.fetchall()
             ]
         return resp
+
+    def customs_partner_by_tnved(self, period, code_filter, region_filter):
+        with connection.cursorI() as cursor:
+            cursor.execute(raw_sql.customs_partner_by_tnved.format(period, code_filter, region_filter))
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        return resp
+
+
 
 
 class CustomData(models.Model):
