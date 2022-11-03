@@ -80,17 +80,17 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
             period_2 = "where cc.period between '2019-01-01' and '2021-12-31'"
         code = request.query_params.get('code')
         if code:
-            code_filter = f'(ctc.tnved_code like {code}) and '
+            code_filter = f"(ctc.tnved_code like '{code}') and "
         else:
             code_filter = ''
         region = request.query_params.get('region')
         if region:
-            region_filter = f' cr.region_name like {region} and '
+            region_filter = f" cr.region_name like '{region}' and "
         else:
             region_filter = ''
         country = request.query_params.get('country')
         if country:
-            country_filter = f' ccn.country_name like {country}'
+            country_filter = f" ccn.country_name like '{country}'"
         else:
             country_filter = ''
         instance = CustomTnvedCode().import_export_by_tnved(period_1, period_2, code_filter, region_filter, country_filter)
