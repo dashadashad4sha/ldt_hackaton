@@ -74,7 +74,7 @@ class ImportExportTnvedSerializer(serializers.Serializer):
 
 
 class PartnerByTnvedSerializer(serializers.Serializer):
-    country_name = serializers.CharField()
+    country = serializers.CharField()
     import_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
     export_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
     trade_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
