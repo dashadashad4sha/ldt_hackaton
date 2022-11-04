@@ -307,11 +307,11 @@ class TextAnalytic(viewsets.GenericViewSet,
 
         period_filter = f"and period between '{start_date}' and '{end_date}'"
         if code:
-            code_filter = f'and ctc.tnved_code = "{code}"'
+            code_filter = f'and ctc.tnved_code like "{code}"'
         else:
             code_filter = ''
         if region:
-            region_filter = f'and cr.region_name = "{region}"'
+            region_filter = f'and cr.region_name like "{region}"'
         else:
             region_filter = ''
         three = CustomData().retrieve_alalytic_three(period_filter=period_filter, region_filter=region_filter, code_filter=code_filter)[0]
