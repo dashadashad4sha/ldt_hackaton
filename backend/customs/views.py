@@ -294,7 +294,7 @@ class TextAnalytic(viewsets.GenericViewSet,
             if rec['direction'] == 'Э':
                 export_custom_volume = rec['customs_volume']
 
-        return response({'one': import_custom_volume, 'two': export_custom_volume, 'six': custom_fee})
+        return Response({'one': import_custom_volume, 'two': export_custom_volume, 'six': custom_fee})
 
     @action(methods=['GET'], detail=False, url_path='three')
     def three(self, request, *args, **kwargs):
