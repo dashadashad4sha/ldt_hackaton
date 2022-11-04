@@ -78,7 +78,7 @@ class CustomTnvedCode(models.Model):
     # ToDO rewrite to Django ORM
     def customs_partner_by_tnved(self, period, code_filter, region_filter):
         with connection.cursor() as cursor:
-            cursor.execute(raw_sql.customs_partner_by_tnved.format(period, code_filter, region_filter, period, code_filter, region_filter))
+            cursor.execute(raw_sql.customs_partner_by_tnved.format(period, code_filter, region_filter))
             columns = [col[0] for col in cursor.description]
             resp = [
                 dict(zip(columns, row))
@@ -129,7 +129,7 @@ class CustomData(models.Model):
 
     def retrieve_alalytic_three(self, period_filter, region_filter, code_filter):
         with connection.cursor() as cursor:
-            cursor.execute(raw_sql.ananytic_three.format(period_filter, region_filter, code_filter))
+            cursor.execute(raw_sql.ananytic_three.format(period_filter, region_filter, code_filter, period_filter, region_filter, code_filter))
             columns = [col[0] for col in cursor.description]
             resp = [
                 dict(zip(columns, row))
