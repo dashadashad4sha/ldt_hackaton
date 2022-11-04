@@ -73,7 +73,6 @@ class CustomDataView(viewsets.GenericViewSet,
                      ):
     queryset = CustomData.objects.all()
     serializer_class = CustomDataSerializer
-    filterset_fields = ['start_date', 'end_date', 'code', 'region']
 
     @swagger_auto_schema(responses=doc_get_customdata_chart)
     @action(methods=['GET'], detail=False, url_path='chart/import')
@@ -101,6 +100,8 @@ class CustomDataView(viewsets.GenericViewSet,
 
             serializer = CustomsDataChartSerializer(instance, many=True)
             return Response(serializer.data)
+
+    filterset_fields = ['start_date', 'end_date', 'code', 'region']
 
     @swagger_auto_schema(
         responses=doc_get_customdata_chart)
@@ -132,6 +133,36 @@ class CustomDataView(viewsets.GenericViewSet,
         print(import_value)
         # return Response(serializer.data)
         return Response(import_value)
+
+    @swagger_auto_schema(
+        responses=doc_get_customdata_chart)
+    @action(methods=['GET'], detail=False, url_path='export_value')
+    def export_value_foo(self, request, *args, **kargs):
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+        if code:
+            code_filter = f"and (ctc.tnved_code like '{code}') "
+        else:
+            code_filter = ''
+
+        if region:
+            region_filter = f"and cr.region_name like '{region}'"
+        else:
+            region_filter = ''
+        if start_date and end_date:
+            period_1 = f'where (cc.period between {start_date} and {end_date}) '
+            period_2 = f'where (cc.period between {start_date} and {end_date})'
+        else:
+            period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
+            period_2 = "where cc.period between '2019-01-01' and '2021-12-31'"
+
+        instance = CustomData().export_value_in_models(period_1, period_2, code_filter, region_filter)
+        export_value = instance
+        print(export_value)
+        # return Response(serializer.data)
+        return Response(export_value)
 
 
 class SanctionView(viewsets.GenericViewSet,

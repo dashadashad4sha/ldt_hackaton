@@ -98,6 +98,19 @@ class CustomData(models.Model):
             ]
         return resp
 
+    def export_value_in_models(self, period_1, period_2, code_filter, region_filter):
+        with connection.cursor() as cursor:
+            print(period_1, period_2, code_filter, region_filter, "#####################################", sep="\n")
+            print(raw_sql.export_value.format(period_1, period_2, code_filter, region_filter))
+            cursor.execute(
+                raw_sql.import_value.format(period_1, period_2, code_filter, region_filter))
+            columns = [col[0] for col in cursor.description] # я не понимаю зачем это, если должно получиться одно чсло
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        return resp
+
 
 class Sanction(models.Model):
     sanction_id = models.IntegerField(unique=True, blank=False)
