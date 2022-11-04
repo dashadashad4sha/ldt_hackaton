@@ -89,3 +89,8 @@ class PartnerByTnvedSerializer(serializers.Serializer):
 #     tnved__tnved_code = serializers.CharField()
 #     tnved__tnved_name = serializers.CharField()
 
+class ImportVolumeSerializer(serializers.Serializer):
+    date = serializers.DateField(format='%Y.%m.%d')
+    import_value = serializers.DecimalField(max_digits=20, decimal_places=2)
+    export_value = serializers.DecimalField(max_digits=20, decimal_places=2)
+

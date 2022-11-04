@@ -118,6 +118,21 @@ class CustomDataView(viewsets.GenericViewSet,
         instance = CustomData().import_value_in_models(region, code) #, start_date, end_date)
         import_value = instance
         return Response(import_value)
+    # def import_value_foo(self, request, *args, **kargs):
+    #     code = request.query_params.get('code')
+    #     region = request.query_params.get('region')
+    #     start_date = request.query_params.get('start_date')
+    #     end_date = request.query_params.get('end_date')
+    #     if not region:
+    #         region = 'Москва'
+    #     if not start_date:
+    #         start_date = '2019-01-01'
+    #     if not end_date:
+    #         end_date = '2020-01-01'
+    #
+    #     instance = CustomData().
+    #     import_value = instance
+    #     return Response(import_value)
 
     @swagger_auto_schema(
         responses=doc_get_customdata_chart)
