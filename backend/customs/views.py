@@ -271,10 +271,10 @@ class RecommendationView(viewsets.GenericViewSet,
 
 
 class TextAnalytic(viewsets.GenericViewSet,
-                   generics.ListAPIView
                    ):
 
-    def list(self, request, *args, **kwargs):
+    @action(methods=['GET'], detail=None, url_path='one_two_six')
+    def one_two_sex(self, request, *args, **kwargs):
         response = {}
         start_date = request.query_params.get('start_date', '2019-01-01')
         end_date = request.query_params.get('end_date', '2020-12-31')
@@ -289,10 +289,25 @@ class TextAnalytic(viewsets.GenericViewSet,
 
         for rec in instance:
             if rec['direction'] == 'И':
-                one = rec['customs_volume']
-                six = rec['tnved__tnved_fee']
+                import_custom_volume = rec['customs_volume']
+                custom_fee = rec['tnved__tnved_fee']
             if rec['direction'] == 'Э':
-                two = rec['customs_volume']
+                export_custom_volume = rec['customs_volume']
 
-        three = CustomData
+        return response({'one': import_custom_volume, 'two': export_custom_volume, 'six': custom_fee})
+
+    @action(methods=['GET'], detail=None, url_path='three')
+    def three(self, request, *args, **kwargs):
+        response = {}
+        start_date = request.query_params.get('start_date', '2019-01-01')
+        end_date = request.query_params.get('end_date', '2020-12-31')
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+
+        period_filter = f'and period between {start_date} and {end_date}'
+        code_filter = f'and code = "{code}"'
+        region_filter = f'and region = "{region}"'
+        three = CustomData().retrieve_alalytic_three(period_filter=period_filter, region_filter=region_filter, code_filter=code_filter)
+
+
 

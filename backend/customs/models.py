@@ -127,6 +127,15 @@ class CustomData(models.Model):
 
         return resp
 
+    def retrieve_alalytic_three(self, period_filter, region_filter, code_filter):
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql.main_customs_partner.format(period_filter, region_filter, code_filter))
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+
 
 class Sanction(models.Model):
     sanction_id = models.IntegerField(unique=True, blank=False)
