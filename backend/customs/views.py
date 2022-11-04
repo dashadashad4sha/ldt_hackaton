@@ -200,8 +200,6 @@ class CustomDataView(viewsets.GenericViewSet,
     queryset = CustomData.objects.all()
     serializer_class = CustomDataSerializer
 
-    def list(self):
-
     @swagger_auto_schema(responses=doc_get_customsdata_chart)
     @action(methods=['GET'], detail=False, url_path='chart/import')
     def import_chart(self, request, *args, **kwargs):
@@ -271,4 +269,14 @@ class RecommendationView(viewsets.GenericViewSet,
         return Response(serializer.data)
 
 
-class TextAnalityc()
+# class TextAnalytic(viewsets.GenericViewSet,
+#                    generics.ListAPIView
+#                    ):
+#
+#     def list(self, request, *args, **kwargs):
+#         start_date = request.query_params.get('start_date')
+#         end_date = request.query_params.get('end_date')
+#         code = request.query_params.get('code')
+#         region = request.query_params.get('region')
+#         instance =
+
