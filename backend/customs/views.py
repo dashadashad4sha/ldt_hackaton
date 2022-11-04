@@ -1,7 +1,7 @@
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets, mixins, status, generics
 from rest_framework.decorators import action
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from rest_framework.response import Response
 
 from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
@@ -78,6 +78,30 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
     queryset = CustomTnvedCode.objects.all()
     serializer_class = TnvedCodeSerializer
     filterset_fields = ['start_date', 'end_date', 'code', 'region', 'country']
+
+    def list(self, request, *args, **kwargs):
+        search_query_tnved_name = request.GET.get('name')
+        search_query_tnved_code = request.GET.get('code')
+        queryset = self.get_queryset()
+
+        if not search_query_tnved_name and not search_query_tnved_code:
+            serializer = TnvedCodeSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+        elif not search_query_tnved_name:
+
+            queryset = queryset.filter(Q(direction='И') & Q(
+                tnved_code__icontains=search_query_tnved_code))  # .values('period', 'tnved_code', 'tnved_name').annotate(volume=Sum('price'))
+
+            serializer = CustomsDataChartSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+        else:
+            queryset = queryset.filter(Q(direction='И') & (
+                    Q(tnved_name__iregex=search_query_tnved_name) | Q(
+                tnved_code=search_query_tnved_code)))
+            serializer = TnvedCodeSerializer(queryset, many=True)
+            return Response(serializer.data)
 
     @swagger_auto_schema(responses=doc_get_import_export_by_tnved)
     @action(methods=['GET'], detail=False, url_path='chart/customs-volume')
@@ -175,6 +199,8 @@ class CustomDataView(viewsets.GenericViewSet,
                      ):
     queryset = CustomData.objects.all()
     serializer_class = CustomDataSerializer
+
+    def list(self):
 
     @swagger_auto_schema(responses=doc_get_customsdata_chart)
     @action(methods=['GET'], detail=False, url_path='chart/import')
