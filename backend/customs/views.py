@@ -169,7 +169,6 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
         return Response(serializer.data)
 
 
-
 class CustomDataView(viewsets.GenericViewSet,
                      mixins.ListModelMixin,
                      mixins.RetrieveModelMixin
@@ -244,3 +243,6 @@ class RecommendationView(viewsets.GenericViewSet,
             'tnved__tnved_code', 'tnved__tnved_name')
         serializer = TopRecommendationSerializer(instance=instance, many=True)
         return Response(serializer.data)
+
+
+class TextAnalityc()
