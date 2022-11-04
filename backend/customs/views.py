@@ -315,7 +315,7 @@ class TextAnalytic(viewsets.GenericViewSet,
         else:
             region_filter = ''
         three = CustomData().retrieve_alalytic_three(period_filter=period_filter, region_filter=region_filter, code_filter=code_filter)[0]
-
+        print(three)
         return Response({'three': three.get['net_import']})
 
 
