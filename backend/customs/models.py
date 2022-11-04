@@ -135,6 +135,7 @@ class CustomData(models.Model):
                 dict(zip(columns, row))
                 for row in cursor.fetchall()
             ]
+        return resp
 
 
 class Sanction(models.Model):
