@@ -1,7 +1,8 @@
+from django.db.models.functions import Coalesce, Round
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, mixins, status, generics
 from rest_framework.decorators import action
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, IntegerField
 from rest_framework.response import Response
 
 from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
@@ -79,7 +80,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
     serializer_class = TnvedCodeSerializer
     filterset_fields = ['start_date', 'end_date', 'code', 'region', 'country']
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request):
         search_query_tnved_name = request.GET.get('name')
         search_query_tnved_code = request.GET.get('code')
         queryset = self.get_queryset()
@@ -90,18 +91,19 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
 
         elif not search_query_tnved_name:
 
-            queryset = queryset.filter(Q(direction='И') & Q(
-                tnved_code__icontains=search_query_tnved_code))  # .values('period', 'tnved_code', 'tnved_name').annotate(volume=Sum('price'))
+            queryset = queryset.filter(Q(custom_data__direction='И') & Q(
+                tnved_code__icontains=search_query_tnved_code))
 
-            serializer = CustomsDataChartSerializer(queryset, many=True)
+            serializer = TnvedCodeSerializer(queryset, many=True)
             return Response(serializer.data)
 
         else:
-            queryset = queryset.filter(Q(direction='И') & (
+            queryset = queryset.filter(Q(custom_data__direction='И') & (
                     Q(tnved_name__iregex=search_query_tnved_name) | Q(
                 tnved_code=search_query_tnved_code)))
             serializer = TnvedCodeSerializer(queryset, many=True)
             return Response(serializer.data)
+
 
     @swagger_auto_schema(responses=doc_get_import_export_by_tnved)
     @action(methods=['GET'], detail=False, url_path='chart/customs-volume')
@@ -269,14 +271,20 @@ class RecommendationView(viewsets.GenericViewSet,
         return Response(serializer.data)
 
 
-# class TextAnalytic(viewsets.GenericViewSet,
-#                    generics.ListAPIView
-#                    ):
-#
-#     def list(self, request, *args, **kwargs):
-#         start_date = request.query_params.get('start_date')
-#         end_date = request.query_params.get('end_date')
-#         code = request.query_params.get('code')
-#         region = request.query_params.get('region')
-#         instance =
+class TextAnalytic(viewsets.GenericViewSet,
+                   generics.ListAPIView
+                   ):
+
+    def list(self, request, *args, **kwargs):
+        response = {}
+        start_date = request.query_params.get('start_date', '2019-01-01')
+        end_date = request.query_params.get('end_date', '2020-12-31')
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+        instance = CustomData.objects.filter(period__range=(start_date, end_date))
+        if code:
+            instance = instance.filter(tnved__tnved_code=code)
+        if region:
+            instance = instance.filter(region__region_name=region)
+        instance = instance.values('direction', 'tnved__tnved_fee').annotate(customs_volume=Coalesce(Round(Sum('price', output_field=IntegerField()) / 1000, 2), 0))
 
