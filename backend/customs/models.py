@@ -85,16 +85,17 @@ class CustomData(models.Model):
     # def __str__(self):
     #     return f'{self.tnved_code}: {self.tnved_name}'
 
-    def export_to_exel(self, code_filter, region_filter):
+    def import_value_in_models(self, period_1, period_2, code_filter, region_filter):
         with connection.cursor() as cursor:
+            print(period_1, period_2, code_filter, region_filter, "#####################################", sep="\n")
+            print(raw_sql.import_value.format(period_1, period_2, code_filter, region_filter))
             cursor.execute(
-                raw_sql.import_value.format(code_filter, region_filter))
+                raw_sql.import_value.format(period_1, period_2, code_filter, region_filter))
             columns = [col[0] for col in cursor.description]
             resp = [
                 dict(zip(columns, row))
                 for row in cursor.fetchall()
             ]
-            # print("№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№№", resp)
         return resp
 
 

@@ -7,10 +7,11 @@ from rest_framework.response import Response
 
 from django.db.models import Q
 
-from .models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction #, ExportToExel
+from .models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, \
+    Sanction  # , ExportToExel
 from .serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
-    TopRecommendationSerializer, CustomsDataChartSerializer #, ExportToExelSerializer
+    TopRecommendationSerializer, CustomsDataChartSerializer  # , ExportToExelSerializer
 
 doc_get_top_recommendation_resp = {
     status.HTTP_200_OK: TopRecommendationSerializer(many=True)
@@ -19,6 +20,7 @@ doc_get_top_recommendation_resp = {
 doc_get_customdata_chart = {
     status.HTTP_200_OK: CustomsDataChartSerializer(many=True)
 }
+
 
 # doc_get_exp_to_xls_resp = {
 #     status.HTTP_200_OK: ExportToExelSerializer(many=True)
@@ -71,6 +73,7 @@ class CustomDataView(viewsets.GenericViewSet,
                      ):
     queryset = CustomData.objects.all()
     serializer_class = CustomDataSerializer
+    filterset_fields = ['start_date', 'end_date', 'code', 'region']
 
     @swagger_auto_schema(responses=doc_get_customdata_chart)
     @action(methods=['GET'], detail=False, url_path='chart/import')
@@ -101,24 +104,34 @@ class CustomDataView(viewsets.GenericViewSet,
 
     @swagger_auto_schema(
         responses=doc_get_customdata_chart)
-    @action(methods=['GET'], detail=False, url_path='export-to-xls')
-    def export_to_exel(self, request, *args, **kargs):
+    @action(methods=['GET'], detail=False, url_path='import_value')
+    def import_value_foo(self, request, *args, **kargs):
         code = request.query_params.get('code')
         region = request.query_params.get('region')
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
         if code:
-            code_filter = f"and (ctc.tnved_code like '{code}%') "
+            code_filter = f"and (ctc.tnved_code like '{code}') "
         else:
             code_filter = ''
 
         if region:
-            region_filter = f"and cr.region_name like '{region}' "
+            region_filter = f"and cr.region_name like '{region}'"
         else:
             region_filter = ''
+        if start_date and end_date:
+            period_1 = f'where (cc.period between {start_date} and {end_date}) '
+            period_2 = f'where (cc.period between {start_date} and {end_date})'
+        else:
+            period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
+            period_2 = "where cc.period between '2019-01-01' and '2021-12-31'"
 
-        instance = CustomData().export_to_exel(code_filter, region_filter)
-        serializer = CustomsDataChartSerializer(instance, many=True)
-        print(serializer.data)
-        return Response(serializer.data)
+        instance = CustomData().import_value_in_models(period_1, period_2, code_filter, region_filter)
+        # serializer = CustomsDataChartSerializer(instance, many=True)
+        import_value = instance
+        print(import_value)
+        # return Response(serializer.data)
+        return Response(import_value)
 
 
 class SanctionView(viewsets.GenericViewSet,
@@ -145,7 +158,6 @@ class RecommendationView(viewsets.GenericViewSet,
             'tnved__tnved_code', 'tnved__tnved_name', 'region__region_name')
         serializer = TopRecommendationSerializer(instance=instance, many=True)
         return Response(serializer.data)
-
 
 # class ExportToExelView(viewsets.GenericViewSet,
 #                        mixins.ListModelMixin,
@@ -176,51 +188,48 @@ class RecommendationView(viewsets.GenericViewSet,
 #
 
 
-
-
-
-        # # export_value = 0
-        # # clean_exp_imp = 0
-        # # clean_exp_imp_del = 0
-        # # main_partners = []
-        # # customs_duties = 0
-        # # sanctions = []
-        # # potential_volume = 0
-        # # del_import = 0
-        # # rows = CustomData.objects.all().values_list('tnved', 'tnved__tnved_name', 'import_value', 'export_value',
-        # #                                             'clean_exp_imp', 'clean_exp_imp_del', 'main_partners',
-        # #                                             'customs_duties', 'sanctions', 'potential_volume', 'del_import')
-        #
-        # rows = [import_value]
-        #
-        # response = HttpResponse(content_type='application/ms-excel')
-        # response['Content-Disposition'] = 'attachment; filename="test.xls"'
-        #
-        # wb = xlwt.Workbook(encoding='utf-8')
-        # ws = wb.add_sheet('Test')
-        #
-        # row_num = 0
-        #
-        # font_style = xlwt.XFStyle()
-        # font_style.font.bold = True
-        #
-        # # columns = ['tnved', 'tnved__tnved_name', 'объём импорта', 'объём экспорта', "чистый импорт/экспорт",
-        # #            "Изменение чистого импорта", "Основные партнеры по импорту", "Таможенные пошлины на импорт",
-        # #            "Наличие ограничений на импорт", "Потенциальный объем ниши", "Выбывающий импорт из-за санкций",
-        # #            "Рост ниши за год"]
-        # columns = ['объём импорта']
-        #
-        # for col_num in range(len(columns)):
-        #     ws.write(row_num, col_num, columns[col_num], font_style)
-        #
-        # # Sheet body, remaining rows
-        # font_style = xlwt.XFStyle()
-        #
-        # for row in rows:
-        #     row_num += 1
-        # for col_num in range(len(row)):
-        #     ws.write(row_num, col_num, row[col_num], font_style)
-        #
-        # wb.save(response)
-        #
-        # return response
+# # export_value = 0
+# # clean_exp_imp = 0
+# # clean_exp_imp_del = 0
+# # main_partners = []
+# # customs_duties = 0
+# # sanctions = []
+# # potential_volume = 0
+# # del_import = 0
+# # rows = CustomData.objects.all().values_list('tnved', 'tnved__tnved_name', 'import_value', 'export_value',
+# #                                             'clean_exp_imp', 'clean_exp_imp_del', 'main_partners',
+# #                                             'customs_duties', 'sanctions', 'potential_volume', 'del_import')
+#
+# rows = [import_value]
+#
+# response = HttpResponse(content_type='application/ms-excel')
+# response['Content-Disposition'] = 'attachment; filename="test.xls"'
+#
+# wb = xlwt.Workbook(encoding='utf-8')
+# ws = wb.add_sheet('Test')
+#
+# row_num = 0
+#
+# font_style = xlwt.XFStyle()
+# font_style.font.bold = True
+#
+# # columns = ['tnved', 'tnved__tnved_name', 'объём импорта', 'объём экспорта', "чистый импорт/экспорт",
+# #            "Изменение чистого импорта", "Основные партнеры по импорту", "Таможенные пошлины на импорт",
+# #            "Наличие ограничений на импорт", "Потенциальный объем ниши", "Выбывающий импорт из-за санкций",
+# #            "Рост ниши за год"]
+# columns = ['объём импорта']
+#
+# for col_num in range(len(columns)):
+#     ws.write(row_num, col_num, columns[col_num], font_style)
+#
+# # Sheet body, remaining rows
+# font_style = xlwt.XFStyle()
+#
+# for row in rows:
+#     row_num += 1
+# for col_num in range(len(row)):
+#     ws.write(row_num, col_num, row[col_num], font_style)
+#
+# wb.save(response)
+#
+# return response
