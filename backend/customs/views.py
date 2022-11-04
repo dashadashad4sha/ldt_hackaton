@@ -306,9 +306,15 @@ class TextAnalytic(viewsets.GenericViewSet,
         region = request.query_params.get('region')
 
         period_filter = f'and period between {start_date} and {end_date}'
-        code_filter = f'and code = "{code}"'
-        region_filter = f'and region = "{region}"'
-        three = CustomData().retrieve_alalytic_three(period_filter=period_filter, region_filter=region_filter, code_filter=code_filter)
+        if code:
+            code_filter = f'and code = "{code}"'
+        else:
+            code_filter = ''
+        if region:
+            region_filter = f'and region = "{region}"'
+        else:
+            region_filter = ''
+        three = CustomData().retrieve_alalytic_three(period_filter=period_filter, region_filter=region_filter, code_filter=code_filter)[0]
 
         return Response({'three': three.get['net_import']})
 
