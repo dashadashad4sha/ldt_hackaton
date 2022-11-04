@@ -91,16 +91,15 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
 
         elif not search_query_tnved_name:
 
-            queryset = queryset.filter(Q(custom_data__direction='И') & Q(
-                tnved_code__icontains=search_query_tnved_code))
+            queryset = queryset.filter(tnved_code__icontains=search_query_tnved_code)
 
             serializer = TnvedCodeSerializer(queryset, many=True)
             return Response(serializer.data)
 
         else:
-            queryset = queryset.filter(Q(custom_data__direction='И') & (
-                    Q(tnved_name__iregex=search_query_tnved_name) | Q(
-                tnved_code=search_query_tnved_code)))
+            queryset = queryset.filter(
+                Q(tnved_name__iregex=search_query_tnved_name) |
+                Q(tnved_code=search_query_tnved_code))
             serializer = TnvedCodeSerializer(queryset, many=True)
             return Response(serializer.data)
 
@@ -286,5 +285,14 @@ class TextAnalytic(viewsets.GenericViewSet,
             instance = instance.filter(tnved__tnved_code=code)
         if region:
             instance = instance.filter(region__region_name=region)
-        instance = instance.values('direction', 'tnved__tnved_fee').annotate(customs_volume=Coalesce(Round(Sum('price', output_field=IntegerField()) / 1000, 2), 0))
+        instance = list(instance.values('direction', 'tnved__tnved_fee').annotate(customs_volume=Coalesce(Round(Sum('price', output_field=IntegerField()) / 1000, 2), 0)))
+
+        for rec in instance:
+            if rec['direction'] == 'И':
+                one = rec['customs_volume']
+                six = rec['tnved__tnved_fee']
+            if rec['direction'] == 'Э':
+                two = rec['customs_volume']
+
+        three = CustomData
 
