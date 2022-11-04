@@ -109,29 +109,14 @@ class CustomDataView(viewsets.GenericViewSet,
     def import_value_foo(self, request, *args, **kargs):
         code = request.query_params.get('code')
         region = request.query_params.get('region')
-        start_date = request.query_params.get('start_date')
-        end_date = request.query_params.get('end_date')
-        if code:
-            code_filter = f"and (ctc.tnved_code like '{code}') "
-        else:
-            code_filter = ''
+        # start_date = request.query_params.get('start_date')
+        # end_date = request.query_params.get('end_date')
 
-        if region:
-            region_filter = f"and cr.region_name like '{region}'"
-        else:
-            region_filter = ''
-        if start_date and end_date:
-            period_1 = f'where (cc.period between {start_date} and {end_date}) '
-            period_2 = f'where (cc.period between {start_date} and {end_date})'
-        else:
-            period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
-            period_2 = "where cc.period between '2019-01-01' and '2021-12-31'"
+        if not region:
+            region = 'Москва'
 
-        instance = CustomData().import_value_in_models(period_1, period_2, code_filter, region_filter)
-        # serializer = CustomsDataChartSerializer(instance, many=True)
+        instance = CustomData().import_value_in_models(region, code) #, start_date, end_date)
         import_value = instance
-        print(import_value)
-        # return Response(serializer.data)
         return Response(import_value)
 
     @swagger_auto_schema(
@@ -140,28 +125,14 @@ class CustomDataView(viewsets.GenericViewSet,
     def export_value_foo(self, request, *args, **kargs):
         code = request.query_params.get('code')
         region = request.query_params.get('region')
-        start_date = request.query_params.get('start_date')
-        end_date = request.query_params.get('end_date')
-        if code:
-            code_filter = f"and (ctc.tnved_code like '{code}') "
-        else:
-            code_filter = ''
+        # start_date = request.query_params.get('start_date')
+        # end_date = request.query_params.get('end_date')
 
-        if region:
-            region_filter = f"and cr.region_name like '{region}'"
-        else:
-            region_filter = ''
-        if start_date and end_date:
-            period_1 = f'where (cc.period between {start_date} and {end_date}) '
-            period_2 = f'where (cc.period between {start_date} and {end_date})'
-        else:
-            period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
-            period_2 = "where cc.period between '2019-01-01' and '2021-12-31'"
+        if not region:
+            region = 'Москва'
 
-        instance = CustomData().export_value_in_models(period_1, period_2, code_filter, region_filter)
+        instance = CustomData().export_value_in_models(region, code) #, start_date, end_date)
         export_value = instance
-        print(export_value)
-        # return Response(serializer.data)
         return Response(export_value)
 
 
