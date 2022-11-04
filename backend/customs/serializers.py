@@ -79,18 +79,6 @@ class PartnerByTnvedSerializer(serializers.Serializer):
     export_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
     trade_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
 
-
 # class ExportToExelSerializer(serializers.Serializer):
-#     class Meta:
-#         model = ExportToExel
-#         fields = ['tnved__tnved_name', 'tnved__tnved_code', 'import_value']
-#     import_value = serializers.DecimalField(max_digits=20, decimal_places=2)
-#     # export_value = serializers.DecimalField(max_digits=20, decimal_places=2)
-#     tnved__tnved_code = serializers.CharField()
-#     tnved__tnved_name = serializers.CharField()
-#
-# class ImportVolumeSerializer(serializers.Serializer):
-#     date = serializers.DateField(format='%Y.%m.%d')
-#     import_value = serializers.DecimalField(max_digits=20, decimal_places=2)
-#     export_value = serializers.DecimalField(max_digits=20, decimal_places=2)
+
 
