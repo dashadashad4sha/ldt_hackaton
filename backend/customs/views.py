@@ -286,14 +286,15 @@ class TextAnalytic(viewsets.GenericViewSet,
         if region:
             instance = instance.filter(region__region_name=region)
         instance = list(instance.values('direction', 'tnved__tnved_fee').annotate(customs_volume=Coalesce(Round(Sum('price', output_field=IntegerField()) / 1000, 2), 0)))
-
+        import_custom_volume = 0
+        export_custom_volume = 0
+        custom_fee = ''
         for rec in instance:
             if rec['direction'] == 'И':
                 import_custom_volume = rec['customs_volume']
                 custom_fee = rec['tnved__tnved_fee']
             if rec['direction'] == 'Э':
                 export_custom_volume = rec['customs_volume']
-
         return Response({'one': import_custom_volume, 'two': export_custom_volume, 'six': custom_fee})
 
     @action(methods=['GET'], detail=False, url_path='three')
@@ -309,5 +310,6 @@ class TextAnalytic(viewsets.GenericViewSet,
         region_filter = f'and region = "{region}"'
         three = CustomData().retrieve_alalytic_three(period_filter=period_filter, region_filter=region_filter, code_filter=code_filter)
 
+        return Response({'three': three.get['net_import']})
 
 
