@@ -158,7 +158,7 @@ ananytic_three = ("with all_import as (select coalesce(round(sum(cc.price) / 1e3
                   "on cc.custom_data_tnved_id = ctc.tnved_id \n"
                   "join customs_region cr \n"
                   "on cc.custom_data_region_id = cr.region_id \n"
-                  "where ("
+                  "where "
                   "cc.direction like 'И'"
                   "{}\n"
                   "	{}\n"
