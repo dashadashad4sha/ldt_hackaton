@@ -305,7 +305,7 @@ class TextAnalytic(viewsets.GenericViewSet,
         code = request.query_params.get('code')
         region = request.query_params.get('region')
 
-        period_filter = f"and period between {'start_date'} and {'end_date'}"
+        period_filter = f"and period between '{start_date}' and '{end_date}'"
         if code:
             code_filter = f'and code = "{code}"'
         else:
