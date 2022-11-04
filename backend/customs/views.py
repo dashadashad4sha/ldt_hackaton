@@ -273,7 +273,7 @@ class RecommendationView(viewsets.GenericViewSet,
 class TextAnalytic(viewsets.GenericViewSet,
                    ):
 
-    @action(methods=['GET'], detail=None, url_path='one_two_six')
+    @action(methods=['GET'], detail=False, url_path='one_two_six')
     def one_two_sex(self, request, *args, **kwargs):
         response = {}
         start_date = request.query_params.get('start_date', '2019-01-01')
@@ -296,7 +296,7 @@ class TextAnalytic(viewsets.GenericViewSet,
 
         return response({'one': import_custom_volume, 'two': export_custom_volume, 'six': custom_fee})
 
-    @action(methods=['GET'], detail=None, url_path='three')
+    @action(methods=['GET'], detail=False, url_path='three')
     def three(self, request, *args, **kwargs):
         response = {}
         start_date = request.query_params.get('start_date', '2019-01-01')
