@@ -315,7 +315,7 @@ class TextAnalytic(viewsets.GenericViewSet,
         else:
             region_filter = ''
         three = CustomData().retrieve_alalytic_three(period_filter=period_filter, region_filter=region_filter, code_filter=code_filter)[0]
-        return Response({'three': three['net_import']})
+        return Response({'value': three['net_import']})
 
     @action(methods=['GET'], detail=False, url_path='four')
     def four(self, request, *args, **kwargs):
@@ -333,9 +333,9 @@ class TextAnalytic(viewsets.GenericViewSet,
             region_filter = ''
         three = CustomData().retrieve_alalytic_four(region_filter=region_filter,
                                                      code_filter=code_filter)[0]
-        return Response({'four': three['import_growth']})
+        return Response({'value': three['import_growth']})
 
-    @action(methods=['GET'], detail=False, url_path='four')
+    @action(methods=['GET'], detail=False, url_path='five')
     def five(self, request, *args, **kwargs):
         response = {}
         code = request.query_params.get('code')
@@ -349,8 +349,10 @@ class TextAnalytic(viewsets.GenericViewSet,
             region_filter = f"and cr.region_name like '{region}'"
         else:
             region_filter = ''
-        three = CustomData().retrieve_alalytic_five(region_filter=region_filter,
-                                                    code_filter=code_filter)[0]
-        return Response({'five': three['import_growth']})
+        try:
+            three = CustomData().retrieve_alalytic_five(region_filter=region_filter, code_filter=code_filter)[0]
+        except IndexError:
+            three = 0
+        return Response({'value': three['country_name']})
 
 
