@@ -27,7 +27,7 @@ def text_analytics(import_custom_volume, export_custom_volume,
     return [ans_1, ans_2]
 
 
-subtitle_text_4_foo_default = text_analytics(0, 0, 0, 0, 0, 0, 0)
+subtitle_text_4_foo_default = text_analytics(0, 0, 0, 0,[], 0, [])
 
 
 def create_presentation(tnved_code='Вы не выбрали код', product="Вы не выбрали товар", img_path_1='default_image.png',
