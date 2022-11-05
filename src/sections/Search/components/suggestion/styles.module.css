@@ -1,0 +1,23 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  transition: .4s ease-in-out;
+}
+
+.wrapper:hover {
+	background: var(--accent-blue-2);
+}
+
+.code {
+  padding-right: 10px;
+}
+
+.name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex: 0 0 80%;
+}

@@ -1,0 +1,14 @@
+.wrapper{
+	display: flex;
+}
+
+.logoImage{
+	margin-right: 10px;
+}
+
+.logoText{
+	max-width: 340px;
+	font-weight: 700;
+	font-size: 16px;
+	text-align: start;
+}

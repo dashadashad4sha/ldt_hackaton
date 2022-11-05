@@ -1,0 +1,11 @@
+.wrapper {
+  display: inline-flex;
+}
+
+.content {
+  margin-right: 8px;
+}
+
+.icon {
+	cursor: pointer;
+}

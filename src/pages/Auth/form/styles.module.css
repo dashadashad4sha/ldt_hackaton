@@ -1,0 +1,27 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.input {
+  appearance: none;
+  border: 1px solid transparent;
+  background: #e0e0e0;
+  border-radius: 50px;
+  margin-bottom: 25px;
+  padding: 20px 30px;
+  color: #7e7e7e;
+  font-size: 24px;
+}
+
+.button {
+	appearance: none;
+	border: 1px solid transparent;
+	padding: 10px 20px;
+	min-width: 250px;
+	border-radius: 20px;
+	font-size: 32px;
+	cursor: pointer;
+}

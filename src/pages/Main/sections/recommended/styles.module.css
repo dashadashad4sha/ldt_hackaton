@@ -1,0 +1,28 @@
+.recommendationTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 40px;
+}
+
+.recommendationTitle .title {
+  font-size: 72px;
+  text-align: center;
+}
+
+.recommendationTitle .dropHead {
+  font-size: 72px;
+  color: var(--accent-blue-1);
+  font-weight: bold;
+  text-align: center;
+}
+
+.recommendationSlider {
+  margin-bottom: 60px;
+}
+
+.recommendationSlider .slider {
+  padding: 0 20px 10px;
+}

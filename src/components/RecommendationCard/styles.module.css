@@ -1,0 +1,37 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 15px;
+  min-height: 250px;
+  cursor: pointer;
+}
+
+.place {
+  font-size: 20px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--accent-red-0);
+  text-align: center;
+  margin-bottom: 10px;
+  padding: 5px 0;
+}
+
+.tnved {
+	text-align: center;
+}
+
+.code {
+  margin-left: 4px;
+  color: var(--accent-blue-0);
+}
+
+.name {
+  display: -webkit-box;
+  max-width: 100%;
+  max-height: 150px;
+  overflow: hidden;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}

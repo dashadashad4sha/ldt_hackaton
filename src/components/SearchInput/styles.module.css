@@ -1,0 +1,63 @@
+.wrapper{
+	padding: 4px;
+	background: var(--accent-blue-0);
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	width: fit-content;
+	position: relative;
+}
+
+.input{
+	height: 40px;
+	min-width: 500px;
+	border-radius: 10px 0 0 10px;
+	padding-right: 20px;
+}
+
+.clearButton {
+	background: var(--light-0);
+	border-radius: 0 10px 10px 0;
+	height: 40px;
+	border: 0px solid transparent;
+	padding: 8px;
+	pointer-events: none;
+}
+
+.clearButton svg {
+	opacity: 0;
+}
+
+.clearButton.show {
+	pointer-events: all;
+}
+
+.clearButton.show svg {
+	opacity: 1;
+}
+
+.button {
+	border: 0px solid transparent;
+	background: transparent;
+	height: 40px;
+	padding: 0 25px;
+	color: var(--light-0)
+}
+
+.suggestions {
+	position: absolute;
+	width: 100%;
+	padding: 10px;
+	border-radius: 12px;
+	top: calc(100% + 8px);
+	left: 0;
+	height: fit-content;
+	background: var(--light-0);
+	display: flex;
+	flex-direction: column;
+}
+
+.suggestions.loading {
+	pointer-events: none;
+	opacity: 0.8;
+}

@@ -1,0 +1,42 @@
+.wrapper{
+	position: relative;
+}
+
+.head {
+	cursor: pointer;
+}
+
+.drop {
+	position: absolute;
+	top: calc(100% + 10px);
+	left: 50%;
+	transform: translateX(-50%);
+	width: clamp(250px, 100%, 300px);
+	border-radius: 12px;
+	display: none;
+}
+
+.drop.open {
+	display: flex;
+	flex-direction: column;
+	max-height: 200px;
+	overflow-y: auto;
+	background: var(--light-0);
+}
+
+.dropElement {
+	width: 100%;
+	cursor: pointer;
+	padding: 10px 12px;
+	transition: .4s ease-in-out;
+}
+
+.dropElement:hover{
+	background: var(--accent-blue-2);
+}
+
+.dropElement.selected {
+	pointer-events: none;
+	background: var(--accent-blue-1);
+	color: var(--light-0);
+}

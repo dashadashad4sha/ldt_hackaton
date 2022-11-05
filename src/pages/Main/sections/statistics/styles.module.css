@@ -1,0 +1,21 @@
+.wrapper {
+	margin-bottom: 50px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 72px;
+  color: var(--dark-0);
+  text-align: center;
+}
+
+.graphs{
+	display: flex;
+}
+
+.loading{
+	width: 100%;
+	font-size: 36px;
+	font-weight: 500;
+	margin: 100px auto;
+}

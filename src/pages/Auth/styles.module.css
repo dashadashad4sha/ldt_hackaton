@@ -1,0 +1,24 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.block {
+  margin: 5% 0;
+  min-width: 550px;
+  padding: 30px 60px;
+}
+
+.title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 42px;
+  margin-bottom: 25px;
+}
+
+@media screen and (max-width: 761px) {
+	.block{
+		min-width: 0;
+	}
+}
