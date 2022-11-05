@@ -357,7 +357,7 @@ class TextAnalytic(viewsets.GenericViewSet,
 
     @action(methods=['GET'], detail=False, url_path='six')
     def sex(self, request, *args, **kwargs):
-        code = request.query_params.get['code']
+        code = request.query_params.get('code')
         instance = list(instance = CustomData.objects.filter(tnved__tnved_code=code).values('country__country_name').distinct('country__country_name'))
 
         if instance:
