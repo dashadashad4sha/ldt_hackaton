@@ -152,7 +152,7 @@ clear_import = ("with all_filters_data as (\n"
                 "order by 1;")
 
 
-ananytic_three = ("with all_import as (select coalesce(round(sum(cc.price) / 1e3, 2), 0) import_tnved\n"
+analytic_three = ("with all_import as (select coalesce(round(sum(cc.price) / 1e3, 2), 0) import_tnved\n"
                   "from customs_customdata cc\n"
                   "join customs_customtnvedcode ctc\n"
                   "on cc.custom_data_tnved_id = ctc.tnved_id \n"
@@ -206,7 +206,7 @@ analytic_four = ("with import_2021 as (select coalesce(round(sum(cc.price) / 1e3
                  "from import_2021 i1, import_2020 i0;")
 
 
-ananytic_five = ("select country_name from (\n"
+analytic_five = ("select country_name from (\n"
                  "select ccn.country_name, sum(cc.price)\n"
                  "from customs_customdata cc\n"
                  "join customs_customtnvedcode ctc\n"
