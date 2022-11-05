@@ -336,7 +336,7 @@ class TextAnalytic(viewsets.GenericViewSet,
         return Response({'four': three['import_growth']})
 
     @action(methods=['GET'], detail=False, url_path='four')
-    def foour(self, request, *args, **kwargs):
+    def five(self, request, *args, **kwargs):
         response = {}
         code = request.query_params.get('code')
         region = request.query_params.get('region')
