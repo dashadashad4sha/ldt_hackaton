@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Unit, Region, Country, \
-    FederalDistrict, CustomTnvedCode, CustomData, Sanction, Recommendation #, ExportToExel
+    FederalDistrict, CustomTnvedCode, CustomData, Sanction, Recommendation
 
 
 class UnitSerializer(serializers.ModelSerializer):
@@ -79,6 +79,19 @@ class PartnerByTnvedSerializer(serializers.Serializer):
     export_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
     trade_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
 
-# class ExportToExelSerializer(serializers.Serializer):
 
+class SanctionGoodsVolume(serializers.Serializer):
+    code = serializers.CharField()
+    sanction_sum = serializers.DecimalField(max_digits=20, decimal_places=2)
+    non_sanction_sum = serializers.DecimalField(max_digits=20, decimal_places=2)
+
+
+class ClearImportByTnved(serializers.Serializer):
+    date = serializers.DateField(format('%Y.%m.%d'))
+    import_volume = serializers.DecimalField(max_digits=20, decimal_places=2)
+
+
+class ExportToExelSerializer(serializers.Serializer):
+    tnved_code = serializers.CharField()
+    tnved_name = serializers.CharField()
 
