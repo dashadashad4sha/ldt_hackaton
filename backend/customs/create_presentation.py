@@ -3,43 +3,37 @@ from pptx.util import Inches, Pt
 from pptx.enum.text import PP_PARAGRAPH_ALIGNMENT
 from datetime import datetime
 
+
 # вместо 'img1.png' и 'img2.jpg' долны быть графики по дефолту
 
 
-def text_analytics(unit, export_volume_money, export_volume_unit, import_volume_money, import_volume_unit, delta,
-                   delta_volume_money, delta_volume_unit, partners_exp, partners_imp, sanctions_imp, sanctions_exp, conclusion, becouse):
+def text_analytics(import_custom_volume, export_custom_volume,
+                   clean_import, clean_exp_imp_del, main_partners, import_duties, sanctions_import):
     """Для 4-5 слайда"""
 
-    ans_1 = f'Объём экспорта: {export_volume_money} $ ' \
-          f'({export_volume_unit} {unit}) \n' \
-          f'Объём импорта: {import_volume_money} $ ' \
-          f'({import_volume_unit} {unit}) \n' \
-          f'\n' \
-          f'{delta}: {delta_volume_money} ' \
-          f'({delta_volume_unit} {unit}) \n'
-    ans_2 = f'Основные торговые партнёры по экспорту: {", ".join([str(x) for x in [*partners_exp]]) } \n' \
-          f'Основные торговые партнёры по импорту: {", ".join([str(x) for x in [*partners_imp]]) }' \
-          f'\n' \
-          f'Санкции на импорт: {", ".join([str(x) for x in [*sanctions_imp]]) }  \n' \
-          f'Санкции на экспорт: {", ".join([str(x) for x in [*sanctions_exp]]) } \n' \
-          f'\n' \
-          f'Вывод: {conclusion} ({becouse})'
+    ans_1 = f'Объём импорта за период: {import_custom_volume} тыс. $ ' \
+            f'Объём экспорта за период: {export_custom_volume} тыс. $ ' \
+            f'\n' \
+            f'Чистый импорт (экспорт, если -): {clean_import} ' \
+            f' \n' \
+            f'Изменение чистого импорта(экспорта, если -): {clean_exp_imp_del}% '
+    ans_2 = f'Основные партнеры по импорту: {", ".join([str(x) for x in [*main_partners]])} \n' \
+            f'\n' \
+            f'Таможенные пошлины на импорт: {import_duties} ' \
+            f'Санкции: {", ".join([str(x) for x in [*sanctions_import]])}  \n' \
+            f'Потенциальный объем ниши: {clean_import} тыс. $   \n' \
+            f'Рост ниши за год: {clean_exp_imp_del} %'
+
     return [ans_1, ans_2]
 
 
-subtitle_text_4_foo_defoult = text_analytics('единиц измерения', 0, 0, 0, 0, 'название',
-                                                           0, 0,
-                                                           ["страна_1", "страна_2"], ["страна_1", "страна_2"],
-                                                           ["страна_1", "страна_2"], ["страна_1", "страна_2"],
-                                                           'вы не указали нишу',
-                                                           "вы не указали нишу")
+subtitle_text_4_foo_default = text_analytics(0, 0, 0, 0, 0, 0, 0)
 
 
-def create_presentation(tnved_code='Вы не выбрали код', product="Вы не выбрали товар", img_path_1='img1.png',
-                        img_path_2='img2.jpg',
-                        subtitle_2='', subtitle_3='', title_text_4='Текстовая аналитика',
-                        subtitle_text_4_foo=subtitle_text_4_foo_defoult, author='Сотрудник департамента'):
-
+def create_presentation(tnved_code='Вы не выбрали код', product="Вы не выбрали товар", img_path_1='default_image.png',
+                        img_path_2='defoult_image.jpg',
+                        subtitle_2='Чистый импорт в товара (помесячно), тыс.дол.', subtitle_3='Доля подсанкционного импорта, %', title_text_4='Информацоннная справка',
+                        subtitle_text_4_foo=subtitle_text_4_foo_default, author='Сотрудник департамента'):
     """tnved_code: product tnved code, product: product name,
        img_path_1: rectangular diagram, img_path_2: square diagram,
        subtitle_2: caption to a rectangular diagram,
@@ -178,7 +172,6 @@ def create_presentation(tnved_code='Вы не выбрали код', product="�
     title.text = f"{title_text_4}"
     subtitle.text = subtitle_text_4_foo[1]
 
-
     # fifth slide
     fifth_slide_layout = prs.slide_layouts[0]
     fifth_slide = prs.slides.add_slide(fifth_slide_layout)
@@ -194,10 +187,7 @@ def create_presentation(tnved_code='Вы не выбрали код', product="�
     # save presentation
     prs.save('test.pptx')
 
-
 # if __name__ == "__main__":
 #     create_presentation()
 #     print(text_analytics('штук', 1000, 1200, 123, 45654, 'dfggdgf', 456456, 56456456465, ["ыавп", "рвыаолр"], ["ыавп", "рвыаолр"],
 #                    ["ыавп", "рвыаолр"], ["ыавп", "рвыаолр"], 'rjhdgidshgisudfghlsdfkjghdfskjghdfskl', "becouse sdjkgfhdskjlfhsdkjl"))
-
-

@@ -7,6 +7,8 @@ from rest_framework.decorators import action
 from django.db.models import Sum, Q, IntegerField
 from rest_framework.response import Response
 
+from create_presentation import create_presentation, text_analytics
+
 from .models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
 from .serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
     TnvedCodeSerializer, CustomDataSerializer, SanctionSerializer, RecommendationSerializer, \
@@ -506,19 +508,128 @@ class TextAnalytic(viewsets.GenericViewSet,
 
         return response
 
-# class RecommendationView(viewsets.GenericViewSet,
-#                          mixins.ListModelMixin,
-#                          mixins.RetrieveModelMixin
-#                          ):
-#     queryset = Recommendation.objects.all()
-#     serializer_class = RecommendationSerializer
-#
-#     def list(self, request):
-#         search_query_region = request.GET.get('region')
-#         queryset = self.get_queryset()
-#
-#         if not search_query_region:
-#             search_query_region = 'Москва'
-#         queryset = queryset.filter(region__region_name__iregex=search_query_region)
-#         serializer = RecommendationSerializer(queryset, many=True)
-#         return Response(serializer.data)
+    @action(methods=['GET'], detail=False, url_path='export_to_pptx')
+    def export_to_presentation(self, request, *args, **kwargs):
+        start_date = request.query_params.get('start_date', '2019-01-01')
+        end_date = request.query_params.get('end_date', '2019-12-31')
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+
+        # get import_custom_volume(1), export_custom_volume(2), custom_fee(6)
+        instance = CustomData.objects.filter(period__range=(start_date, end_date))
+        if code:
+            instance = instance.filter(tnved__tnved_code=code)
+        if region:
+            instance = instance.filter(region__region_name=region)
+        instance = list(instance.values('direction', 'tnved__tnved_fee').annotate(
+            customs_volume=Coalesce(Round(Sum('price', output_field=IntegerField()) / 1000, 2), 0)))
+        import_custom_volume = 0
+        export_custom_volume = 0
+        custom_fee = ''
+        for rec in instance:
+            if rec['direction'] == 'И':
+                import_custom_volume = rec['customs_volume']
+                print("ok")
+                custom_fee = rec['tnved__tnved_fee']
+                print("ok")
+            if rec['direction'] == 'Э':
+                export_custom_volume = rec['customs_volume']
+                print("ok")
+
+        # get net_import (3) (clean import)
+        period_filter = f"and period between '{start_date}' and '{end_date}'"
+        if code:
+            code_filter = f"and ctc.tnved_code like '{code}'"
+        else:
+            code_filter = ''
+            print("not ok")
+        if region:
+            region_filter = f"and cr.region_name like '{region}'"
+        else:
+            region_filter = ''
+            print("not ok")
+        three = CustomData().retrieve_alalytic_three(period_filter=period_filter, region_filter=region_filter,
+                                                     code_filter=code_filter)[0]
+        clean_import = three['net_import']
+
+        # get import_growth (4) (clean_exp_imp_del)
+        if code:
+            code_filter = f"and ctc.tnved_code like '{code}'"
+        else:
+            code_filter = ''
+        if region:
+            region_filter = f"and cr.region_name like '{region}'"
+        else:
+            region_filter = ''
+        three = CustomData().retrieve_alalytic_four(region_filter=region_filter,
+                                                    code_filter=code_filter)[0]
+        clean_exp_imp_del = three['import_growth']
+
+        # get country_name (5) (main_partners)
+        if code:
+            code_filter = f"and ctc.tnved_code like '{code}'"
+        else:
+            code_filter = ''
+        if region:
+            region_filter = f"and cr.region_name like '{region}'"
+        else:
+            region_filter = ''
+        try:
+            three = CustomData().retrieve_alalytic_five(region_filter=region_filter, code_filter=code_filter)[0]
+        except IndexError:
+            three = 0
+        main_partners = three['country_name']
+
+        # get sanctions_import (7) (sanctions_import)
+        instance = list(
+            CustomData.objects.filter(tnved__tnved_code=code, direction='И').values('country__country_name').distinct(
+                'country__country_name'))
+
+        if instance:
+            sanctions_import = [value.get('country__country_name') for value in instance]
+        else:
+            sanctions_import = []
+
+        potential_volume = 0
+        if clean_import > 0:
+            potential_volume = clean_import
+
+        values = [code,
+                  # tnved_name,
+                  region,
+                  f'С {start_date} по {end_date}',
+                  import_custom_volume,
+                  export_custom_volume,
+                  clean_import,
+                  clean_exp_imp_del,
+                  main_partners,
+                  custom_fee,
+                  sanctions_import,
+                  potential_volume,
+                  # vyb_imp,
+                  clean_exp_imp_del]
+        # from create_presentation import create_presentation
+
+        create_presentation(tnved_code=code, product="имя кода?", img_path_1='img_recktangle.png', img_path_2='img_square.png',
+                            subtitle_text_4_foo=text_analytics(import_custom_volume, export_custom_volume,
+                                                               clean_import, clean_exp_imp_del, main_partners,
+                                                               custom_fee,
+                                                               sanctions_import))
+        return request # а что возвращать???
+
+    # class RecommendationView(viewsets.GenericViewSet,
+    #                          mixins.ListModelMixin,
+    #                          mixins.RetrieveModelMixin
+    #                          ):
+    #     queryset = Recommendation.objects.all()
+    #     serializer_class = RecommendationSerializer
+    #
+    #     def list(self, request):
+    #         search_query_region = request.GET.get('region')
+    #         queryset = self.get_queryset()
+    #
+    #         if not search_query_region:
+    #             search_query_region = 'Москва'
+    #         queryset = queryset.filter(region__region_name__iregex=search_query_region)
+    #         serializer = RecommendationSerializer(queryset, many=True)
+    #         return Response(serializer.data)
