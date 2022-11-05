@@ -98,6 +98,7 @@ class CustomTnvedCode(models.Model):
             ]
         return resp
 
+
 class CustomData(models.Model):
     tnved = models.ForeignKey(CustomTnvedCode, on_delete=models.CASCADE, related_name='custom_data',
                               to_field='tnved_id', db_column='custom_data_tnved_id')
@@ -129,7 +130,19 @@ class CustomData(models.Model):
 
     def retrieve_alalytic_three(self, period_filter, region_filter, code_filter):
         with connection.cursor() as cursor:
-            cursor.execute(raw_sql.ananytic_three.format(period_filter, region_filter, code_filter, period_filter, region_filter, code_filter))
+            cursor.execute(
+                raw_sql.ananytic_three.format(period_filter, region_filter, code_filter, period_filter, region_filter,
+                                              code_filter))
+            columns = [col[0] for col in cursor.description]
+            resp = [
+                dict(zip(columns, row))
+                for row in cursor.fetchall()
+            ]
+        return resp
+
+    def retrieve_alalytic_four(self, region_filter, code_filter):
+        with connection.cursor() as cursor:
+            cursor.execute(raw_sql.ananytic_three.format(region_filter, code_filter, region_filter, code_filter))
             columns = [col[0] for col in cursor.description]
             resp = [
                 dict(zip(columns, row))
