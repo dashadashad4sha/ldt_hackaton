@@ -362,4 +362,4 @@ class TextAnalytic(viewsets.GenericViewSet,
 
         if instance:
             Response({'value': [value.get('country__country_name') for value in instance]})
-        Response({'value': []})
+        return Response({'value': []})
