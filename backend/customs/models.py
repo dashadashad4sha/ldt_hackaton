@@ -142,6 +142,7 @@ class CustomData(models.Model):
 
     def retrieve_alalytic_four(self, region_filter, code_filter):
         with connection.cursor() as cursor:
+            print(raw_sql.analytic_four.format(region_filter, code_filter, region_filter, code_filter))
             cursor.execute(raw_sql.analytic_four.format(region_filter, code_filter, region_filter, code_filter))
             columns = [col[0] for col in cursor.description]
             resp = [
