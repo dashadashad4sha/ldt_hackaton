@@ -66,6 +66,29 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
     queryset = CustomTnvedCode.objects.all()
     serializer_class = TnvedCodeSerializer
 
+    def list(self, request):
+        search_query_tnved_name = request.GET.get('name')
+        search_query_tnved_code = request.GET.get('code')
+        queryset = self.get_queryset()
+
+        if not search_query_tnved_name and not search_query_tnved_code:
+            serializer = TnvedCodeSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+        elif not search_query_tnved_name:
+
+            queryset = queryset.filter(tnved_code__icontains=search_query_tnved_code)
+
+            serializer = TnvedCodeSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+        else:
+            queryset = queryset.filter(
+                    Q(tnved_name__iregex=search_query_tnved_name) |
+                    Q(tnved_code=search_query_tnved_code))
+            serializer = TnvedCodeSerializer(queryset, many=True)
+            return Response(serializer.data)
+
 
 class CustomDataView(viewsets.GenericViewSet,
                      mixins.ListModelMixin,
@@ -192,14 +215,14 @@ class RecommendationView(viewsets.GenericViewSet,
     queryset = Recommendation.objects.all()
     serializer_class = RecommendationSerializer
 
-    @swagger_auto_schema(
-        responses=doc_get_top_recommendation_resp)
-    @action(methods=['GET'], detail=False, url_path='top')
-    def top_recommendation(self, request, *args, **kargs):
-        search_query = request.GET.get('region')
-        instance = Recommendation.objects.filter(region__region_name__iregex=search_query).values(
-            'tnved__tnved_code', 'tnved__tnved_name', 'region__region_name')
-        serializer = TopRecommendationSerializer(instance=instance, many=True)
+    def list(self, request):
+        search_query_region = request.GET.get('region')
+        queryset = self.get_queryset()
+
+        if not search_query_region:
+            search_query_region = 'Москва'
+        queryset = queryset.filter(region__region_name__iregex=search_query_region)
+        serializer = RecommendationSerializer(queryset, many=True)
         return Response(serializer.data)
 
 

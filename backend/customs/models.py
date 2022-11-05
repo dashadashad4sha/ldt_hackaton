@@ -85,25 +85,7 @@ class CustomData(models.Model):
     # def __str__(self):
     #     return f'{self.tnved_code}: {self.tnved_name}'
 
-    def import_value_in_models(self, region, code):  #, start_date='2019-01-01', end_date='2021-01-01'):
-        with connection.cursor() as cursor:
-            cursor.execute(raw_sql.import_value, [region, code]) #, start_date, end_date])
-            columns = [col[0] for col in cursor.description]
-            resp = [
-                dict(zip(columns, row))
-                for row in cursor.fetchall()
-            ]
-        return resp
 
-    def export_value_in_models(self, region, code):  #, start_date='2019-01-01', end_date='2021-01-01'):
-        with connection.cursor() as cursor:
-            cursor.execute(raw_sql.import_value, [region, code])  # , start_date, end_date])
-            columns = [col[0] for col in cursor.description]
-            resp = [
-                dict(zip(columns, row))
-                for row in cursor.fetchall()
-            ]
-        return resp
 
 
 class Sanction(models.Model):
