@@ -335,4 +335,22 @@ class TextAnalytic(viewsets.GenericViewSet,
                                                      code_filter=code_filter)[0]
         return Response({'four': three['import_growth']})
 
+    @action(methods=['GET'], detail=False, url_path='four')
+    def foour(self, request, *args, **kwargs):
+        response = {}
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+
+        if code:
+            code_filter = f"and ctc.tnved_code like '{code}'"
+        else:
+            code_filter = ''
+        if region:
+            region_filter = f"and cr.region_name like '{region}'"
+        else:
+            region_filter = ''
+        three = CustomData().retrieve_alalytic_five(region_filter=region_filter,
+                                                    code_filter=code_filter)[0]
+        return Response({'five': three['import_growth']})
+
 

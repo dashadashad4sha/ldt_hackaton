@@ -204,3 +204,20 @@ analytic_four = ("with import_2021 as (select coalesce(round(sum(cc.price) / 1e3
                  "	   )\n"
                  "select round((	i1.imp_2021 / i0.imp_2020 - 1) * 100, 2) as import_growth\n"
                  "from import_2021 i1, import_2020 i0;")
+
+
+ananytic_five = ("select country_name from (\n"
+                 "select ccn.country_name, sum(cc.price)\n"
+                 "from customs_customdata cc\n"
+                 "join customs_customtnvedcode ctc\n"
+                 "on cc.custom_data_tnved_id = ctc.tnved_id \n"
+                 "join customs_region cr \n"
+                 "on cc.custom_data_region_id = cr.region_id \n"
+                 "join customs_country ccn \n"
+                 "on cc.custom_data_country_id = ccn.country_id \n"
+                 "where cc.direction like 'И'\n"
+                 "{} \n"
+                 "{}\n"
+                 "group by 1\n"
+                 "order by 2\n"
+                 "limit 3) tbl;")
