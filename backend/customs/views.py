@@ -331,7 +331,7 @@ class TextAnalytic(viewsets.GenericViewSet,
             region_filter = f"and cr.region_name like '{region}'"
         else:
             region_filter = ''
-        three = CustomData().retrieve_alalytic_three(region_filter=region_filter,
+        three = CustomData().retrieve_alalytic_four(region_filter=region_filter,
                                                      code_filter=code_filter)[0]
         return Response({'four': three['import_growth']})
 
