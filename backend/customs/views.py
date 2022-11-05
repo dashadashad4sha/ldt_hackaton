@@ -212,10 +212,10 @@ class CustomDataView(viewsets.GenericViewSet,
     @swagger_auto_schema(responses=doc_get_customsdata_chart)
     @action(methods=['GET'], detail=False, url_path='chart/export')
     def export_chart(self, request, *args, **kwargs):
-        instance = CustomData.objects.filte(direction='Э').order_by('period').values('period').annotate(
+        instance = CustomData.objects.filter(direction='Э').order_by('period').values('period').annotate(
             volume=Sum('price'))
         serializer = CustomsDataChartSerializer(instance, many=True)
-        return Response(serializer.deta)
+        return Response(serializer.data)
 
     @swagger_auto_schema(responses=doc_get_customsdata_main_partner)
     @action(methods=['GET'], detail=False, url_path='chart/main-partner')
