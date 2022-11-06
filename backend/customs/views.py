@@ -79,6 +79,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
     queryset = CustomTnvedCode.objects.all()
     serializer_class = TnvedCodeSerializer
     filterset_fields = ['start_date', 'end_date', 'code', 'region', 'country']
+    lookup_field = 'tnved_id'
 
     def list(self, request):
         search_query_tnved_name = request.GET.get('name')
