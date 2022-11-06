@@ -1,15 +1,15 @@
 # ldt_hackaton
 ## Хакатон Лидеры Цифровых Трансформаций
 ### Команда malachite:
-> Матвеева Ксения @Ksemat (data analyst, team lead)
+> Матвеева Ксения @ks-matveeva (data analyst, team lead)
 
-> Жуков Николай @nikolay_v_Zhukov (data science)
+> Жуков Николай @zhukovnikolay (data science)
 
-> Полуместный Андрей @apolumestny (backend)
+> Полуместный Андрей @poluandrey (backend)
 
-> Корепанов Андрей @Cucunbers (frontend)
+> Корепанов Андрей @cucunber (frontend)
 
-> Матвеева Дарья @dar_ya_mat (backend)
+> Матвеева Дарья @dashadashad4sha (backend)
 
 
 ### Разработанный сервис позволяет проводить анализ таможенной статистики и предназначен для поиска перспективных ниш российского рынка с преобладанием импортных товаров для развития импортозамещающего бизнеса.
