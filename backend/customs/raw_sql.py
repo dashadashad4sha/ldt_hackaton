@@ -233,4 +233,4 @@ analytic_eight = ("select coalesce(round(sum(cc.price) / 1e3, 2), 0)\n"
                   "on cc.custom_data_tnved_id = cs.tnved_id and cc.custom_data_country_id = cs.country_id and cc.direction = cs.direction \n"
                   "where cc.direction like 'И' and cs.sanction_id>0"
                   "{} \n"
-                  "	  {} ;"
+                  "	  {} ;")
