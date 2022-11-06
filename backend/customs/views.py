@@ -439,6 +439,7 @@ class TextAnalytic(viewsets.GenericViewSet,
             main_partners = three['country_name']
         except IndexError:
             three = 0
+            main_partners = None
 
 
         # get sanctions_import (7) (sanctions_import)
