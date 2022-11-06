@@ -1,7 +1,13 @@
 import { FC } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { routes } from "../../config";
-import { AnalyticsPage, AuthPage, MainPage, ProfilePage } from "../../pages";
+import {
+  AnalyticsPage,
+  AuthPage,
+  MainPage,
+  NotFountPage,
+  ProfilePage,
+} from "../../pages";
 import Layout from "../Layout";
 
 const Router: FC = () => {
@@ -13,6 +19,7 @@ const Router: FC = () => {
           <Route path={routes.main} element={<MainPage />} />
           <Route path={routes.analytic} element={<AnalyticsPage />} />
           <Route path={routes.profile} element={<ProfilePage />} />
+          <Route path="*" element={<NotFountPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

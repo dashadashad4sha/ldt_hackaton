@@ -55,7 +55,7 @@ class UserStore{
 			return
 		}
 		const newLiked = this.favorite.filter((obj) => obj.tnvedId !== tnved);
-		localStorage.setItem('favorite', JSON.stringify(newLiked));
+		localStorage.setItem('favorite', JSON.stringify(newLiked.map((liked) => liked.tnvedId)));
 		runInAction(() => {
 			this.favorite = newLiked;
 		})

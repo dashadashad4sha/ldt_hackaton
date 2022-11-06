@@ -1,0 +1,22 @@
+.wrapper {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 50px 0;
+	flex-direction: column;
+}
+
+.title {
+	font-size: 100px;
+	color: var(--accent-blue-0);
+}
+
+.link {
+	margin-top: 20px;
+	font-size: 20px;
+	text-decoration: none;
+	color: var(--light-0);
+	padding: 8px 12px;
+	border-radius: 99999px;
+}
