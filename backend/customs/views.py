@@ -134,7 +134,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
             region_filter = ''
 
         if country:
-            country_filter = f"and ccn.country_name like '{country}'"
+            country_filter = f"where ccn.country_name like '{country}'"
         else:
             country_filter = ''
         instance = CustomTnvedCode().import_export_by_tnved(period_1, period_2, code_filter, region_filter,
@@ -748,7 +748,7 @@ class TextAnalytic(viewsets.GenericViewSet,
                   clean_exp_imp_del]
         # from create_presentation import create_presentation
 
-        create_presentation(tnved_code=code, product="имя кода?", img_path_1='img_recktangle.png', img_path_2='img_square.png',
+        create_presentation(tnved_code=code, product="имя кода?",  # img_path_1='img_recktangle.png', img_path_2='img_square.png',
                             subtitle_text_4_foo=text_analytics(import_custom_volume, export_custom_volume,
                                                                clean_import, clean_exp_imp_del, main_partners,
                                                                custom_fee,
