@@ -435,9 +435,10 @@ class TextAnalytic(viewsets.GenericViewSet,
             region_filter = ''
         try:
             three = CustomData().retrieve_alalytic_five(region_filter=region_filter, code_filter=code_filter)[0]
+            main_partners = three['country_name']
         except IndexError:
             three = 0
-        main_partners = three['country_name']
+
 
         # get sanctions_import (7) (sanctions_import)
         instance = list(
