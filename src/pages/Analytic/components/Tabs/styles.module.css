@@ -1,0 +1,33 @@
+.wrapper{
+	width: 100%;
+}
+
+.tabs {
+	border-bottom: 1px solid var(--accent-blue-0);
+	display: inline-flex;
+	margin-bottom: 20px;
+}
+
+.tab {
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	background: transparent;
+	padding: 10px;
+	transition: .3s ease-in-out;
+	height: 100%;
+	cursor: pointer;
+	color: var(--dark-0);
+	font-weight: 500;
+	font-size: 20px;
+	line-height: 1;
+	white-space: nowrap;
+}
+
+.tab.active {
+	background: var(--accent-blue-0);
+	color: var(--light-0);
+}
+
+.content {
+	width: 100%;
+}

@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
+import { Loader } from "../../../../components";
 import useStore from "../../../../store";
 import ImportExportGraph from "../importExport";
 import TopPartners from "../topPartners";
@@ -28,7 +29,9 @@ const Statistics = observer(() => {
           <TopPartners partners={partners} />
         </section>
       ) : (
-        <h3 className={s.loading}>Загружаем данные</h3>
+        <h3 className={clsx(s.loading, 'full-loader')}>
+			<Loader />
+		</h3>
       )}
     </section>
   );

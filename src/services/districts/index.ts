@@ -1,15 +1,18 @@
+import { CountryFromServer } from "../../domain";
 import FederalDistrictDomain from "../../domain/federalDistrict";
 import { RegionFromServer } from "../../domain/region";
 import API from "../api";
 
 const endpoints = {
 	federalDistricts: '/customs/federal-district/',
-	regions: '/customs/region/'
+	regions: '/customs/region/',
+	countries: '/customs/country/',
 }
 
 type DistrictsEndpointResponse = {
 	federalDistricts: PaginatedResponse<FederalDistrictDomain>
 	regions: PaginatedResponse<RegionFromServer>
+	countries: PaginatedResponse<CountryFromServer>
 }
 
 class DistrictsService{

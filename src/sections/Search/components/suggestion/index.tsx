@@ -4,14 +4,17 @@ import { routes } from "../../../../config";
 import TnvedDomain from "../../../../domain/tnved";
 import s from './styles.module.css';
 
-export type SuggestionElementProps = TnvedDomain;
+export type SuggestionElementProps = TnvedDomain & {
+	onClick?: () => void;
+};
 
-const SuggestionElement: FC<SuggestionElementProps> = ({ tnvedCode, tnvedId, tnvedName }) => {
+const SuggestionElement: FC<SuggestionElementProps> = ({ tnvedCode, tnvedId, tnvedName, onClick }) => {
   const navigator = useNavigate();
 
   const navigateToAnalytic = useCallback(() => {
-    navigator(routes.analytic.replace(":id", tnvedId.toString()));
-  }, [tnvedId, navigator]);
+	onClick?.();
+    navigator(routes.analytic.replace(":code", tnvedCode.toString()).replace(':id', tnvedId.toString()));
+  }, [navigator, onClick, tnvedCode, tnvedId]);
 
   return (
     <div className={s.wrapper} tabIndex={0} onClick={navigateToAnalytic}>

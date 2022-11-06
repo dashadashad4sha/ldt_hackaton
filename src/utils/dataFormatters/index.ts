@@ -5,7 +5,7 @@ const camelize = <T extends object>(obj: T) =>
         const camelKey = isArray(target) ? key : camelCase(key.toString());
 
         // @ts-ignore
-        acc[camelKey] = isObject(value) ? this.camelize(value) : value;
+        acc[camelKey] = isObject(value) ? camelize(value) : value;
     }) as T
 	
 const snakeize = (obj: any): any =>
@@ -13,7 +13,7 @@ const snakeize = (obj: any): any =>
 		const camelKey = isArray(target) ? key : snakeCase(key.toString());
 
 		// @ts-ignore
-	acc[camelKey] = isObject(value) ? this.snakeize(value) : value;
+	acc[camelKey] = isObject(value) ? snakeize(value) : value;
 });
 
 const dataFormatters = {

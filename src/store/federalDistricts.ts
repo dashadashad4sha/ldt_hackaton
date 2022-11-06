@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import CountryDomain from "../domain/country";
 import FederalDistrictDomain from "../domain/federalDistrict";
 import RegionDomain, { RegionCode } from "../domain/region";
 import API from "../services/api";
@@ -8,6 +9,7 @@ import { dataFormatters } from "../utils";
 class FederalDistrictsStore {
 	districts: FederalDistrictDomain[] = [];
 	regions: RegionDomain[] = [];
+	countries: CountryDomain[] = [];
 	defaultRegionCode: RegionCode = '45000';
 	private districtService: DistrictsService
 	constructor(apiInstance: API){
@@ -33,6 +35,17 @@ class FederalDistrictsStore {
 				this.districts = districts.results.map((district) => new FederalDistrictDomain(dataFormatters.camelize(district)))
 			})
 		} catch(e){
+			console.error(e)
+		}
+	}
+
+	async getCountries(){
+		try {
+			const countries = await this.districtService.getDistricts('countries');
+			runInAction(() => {
+				this.countries = countries.results.map((country) => CountryDomain.countryFromServer(dataFormatters.camelize(country)))
+			})
+		} catch(e) {
 			console.error(e)
 		}
 	}

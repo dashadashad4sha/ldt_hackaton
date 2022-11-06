@@ -3,13 +3,18 @@
 	flex-direction: column;
 	padding: 20px 10px;
 	align-items: center;
-	max-width: 700px;
+	max-width: 550px;
 	margin-right: 20px;
+	margin-bottom: 20px;
 }
 
 .title {
   font-weight: 500;
-  font-size: 36px;
+  font-size: 28px;
   color: var(--dark-0);
   text-align: center;
+}
+
+.chart svg {
+	overflow: visible;
 }

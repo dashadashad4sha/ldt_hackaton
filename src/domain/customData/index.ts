@@ -2,7 +2,7 @@ import { CountryId } from "../country"
 import RegionDomain from "../region"
 import { TnvedId } from "../tnved"
 
-export type CustomDataDirection = 's' | 'e'
+export type Direction = 'Э' | 'И'
 export type CustomDataUnit = number // unit model
 export type CustomDataPrice = string
 export type CustomDataVolume = string
@@ -10,7 +10,7 @@ export type CustomDataQuantity = string
 
 class CustomDataDomain {
 	tnved: TnvedId
-	direction: CustomDataDirection
+	direction: Direction
 	country: CountryId
 	period: DateString
 	region: RegionDomain

@@ -1,0 +1,77 @@
+:root {
+  --space: 20px;
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  align-items: space-between;
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+.favorite,
+.info {
+  min-height: 400px;
+  flex: 0 0 calc(50% - var(--space));
+}
+
+.favoriteTitle {
+  margin-bottom: 16px;
+}
+
+.favoriteList {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cardClear {
+  background: var(--accent-red-0);
+  padding: 6px 8px;
+  border-radius: 50%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.infoAvatar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.infoAvatar img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 4px solid var(--accent-blue-0);
+}
+
+.infoName {
+  display: flex;
+  justify-content: center;
+}

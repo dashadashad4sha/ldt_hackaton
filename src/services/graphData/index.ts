@@ -1,28 +1,79 @@
+import { CountryName } from "../../domain";
 import { GlobalPartnersFromServerData } from "../../domain/globalPartners";
 import GlobalVolumeDomain from "../../domain/globalVolume";
+import SanctionsDomain from "../../domain/sanctions";
+import { getQueryParams } from "../../utils";
 import API from "../api";
 
 const endpoints = {
 	mainExport: '/customs/custom-data/chart/export/',
 	mainImport: '/customs/custom-data/chart/import/',
-	mainPartners: '/customs/custom-data/chart/main-partner/'
+	mainPartners: '/customs/custom-data/chart/main-partner/',
+	analyticsTradePartners: '/customs/tnved/chart/customs-partner/',
+	analyticsImportExport: '/customs/tnved/chart/customs-volume/',
+	analyticsClearImport: '/customs/tnved/clera-import/',
+	analyticsSanctions: '/customs/sanction/goods-volume/',
+}
+
+export type AnalyticsTradePartners = {
+	country: CountryName,
+	importVolume: string,
+	exportVolume: string,
+	tradeVolume: string,
+}
+
+export type AnalyticsImportExport = {
+	date: DateString,
+	importValue: string,
+	exportValue: string,
+}
+
+export type AnalyticsClearImport = {
+	date: DateString,
+	importVolume: string,
+}
+
+export type AnalyticsSanctions = {
+	code: string,
+	sanctionSum: string,
+	nonSanctionSum: string
 }
 
 type GraphDataEndpointResponse = {
 	mainExport: GlobalVolumeDomain[],
 	mainImport: GlobalVolumeDomain[],
 	mainPartners: GlobalPartnersFromServerData[],
+	analyticsTradePartners: AnalyticsTradePartners[],
+	analyticsImportExport: AnalyticsImportExport[],
+	analyticsSanctions: AnalyticsSanctions[],
+	analyticsClearImport: AnalyticsClearImport[],
 }
 
+type DefaultFilters = {
+	startDate: DateString,
+	endDate: DateString,
+	code: string,
+	region: string,
+}
 
+type GraphDataEndpointParams = {
+	mainExport: {},
+	mainImport: {},
+	mainPartners: {},
+	analyticsTradePartners: DefaultFilters,
+	analyticsImportExport: DefaultFilters,
+	analyticsSanctions: Omit<DefaultFilters, 'startDate' | 'endDate'>,
+	analyticsClearImport: DefaultFilters,
+}
 class GraphDataService {
 	private apiInstance: API
 	constructor(apiInstance: API){
 		this.apiInstance = apiInstance;
 	}
-	async getData<T extends keyof typeof endpoints>(endpoint: T){
+	async getData<T extends keyof typeof endpoints>(endpoint: T, params?: GraphDataEndpointParams[T]){
 		try{
-			const { data } = await this.apiInstance.get<GraphDataEndpointResponse[T]>(endpoints[endpoint]);
+			const queryParams = getQueryParams(params);
+			const { data } = await this.apiInstance.get<GraphDataEndpointResponse[T]>(endpoints[endpoint], { params: queryParams });
 			return data;
 		} catch(e){
 			throw e

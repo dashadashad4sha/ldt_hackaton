@@ -4,7 +4,7 @@ import Dropdown, { DropdownOption } from "../../../../components/Dropdown";
 import RegionDomain from "../../../../domain/region";
 import useStore from "../../../../store";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { RecommendationCard } from "../../../../components";
+import { Loader, RecommendationCard } from "../../../../components";
 import clsx from "clsx";
 import s from "./styles.module.css";
 import { observer } from "mobx-react-lite";
@@ -66,33 +66,33 @@ const RecommendedSection: FC = observer(() => {
           options={mappedRegions}
           fallbackValue={initialValue}
           headClassName={s.dropHead}
-		  dropClassName={"block"}
+          dropClassName={"block"}
         />
       </section>
-      <section
-        className={clsx(s.recommendationSlider, {
-          [s.loading]: recommendations.flags.isLoading,
-        })}
-      >
-        {hasRecommendations ? (
-          <Swiper
-            className={s.slider}
-            spaceBetween={50}
-            slidesPerView={4}
-            modules={[Navigation, Pagination]}
-            pagination={{ clickable: true }}
-			loop
-          >
-            {recommendations.recommendations.map((recommendation, key) => (
-              <SwiperSlide key={recommendation.tnvedCode}>
-                <RecommendationCard place={key + 1} {...recommendation} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <h3>По данному региону нет рекоменадций</h3>
-        )}
-      </section>
+      {recommendations.flags.isLoading ? (
+        <div className={"full-loader"}><Loader /></div>
+      ) : (
+        <section className={clsx(s.recommendationSlider)}>
+          {hasRecommendations ? (
+            <Swiper
+              className={s.slider}
+              spaceBetween={50}
+              slidesPerView={4}
+              modules={[Navigation, Pagination]}
+              pagination={{ clickable: true }}
+              loop
+            >
+              {recommendations.recommendations.map((recommendation, key) => (
+                <SwiperSlide key={recommendation.tnvedCode}>
+                  <RecommendationCard place={key + 1} {...recommendation} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <h3>По данному региону нет рекоменадций</h3>
+          )}
+        </section>
+      )}
     </div>
   );
 });

@@ -23,6 +23,10 @@ const Search: FC = observer(() => {
     [debouncedSearch]
   );
 
+  const handleClearInput = useCallback(() => {
+	setSearchValue('');
+  }, [])
+
   useEffect(() => {
     handleSearch(searchValue);
   }, [handleSearch, searchValue]);
@@ -30,9 +34,9 @@ const Search: FC = observer(() => {
   const mappedSuggestions = useMemo(
     () =>
       searchStore.suggestions.map((suggestions) => (
-        <SuggestionElement key={suggestions.tnvedCode} {...suggestions} />
+        <SuggestionElement onClick={handleClearInput} key={suggestions.tnvedCode} {...suggestions} />
       )),
-    [searchStore.suggestions]
+    [handleClearInput, searchStore.suggestions]
   );
 
   return (

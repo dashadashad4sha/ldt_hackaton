@@ -2,7 +2,6 @@ import { FC, useCallback, useMemo, useState } from "react";
 import MainDataStore from "../../../../store/mainData";
 import { PieChart, Pie, Cell, Sector } from "recharts";
 import { numberFormatter, shadeGenerator } from "../../../../utils";
-import { shuffle } from "lodash";
 import clsx from "clsx";
 import s from "./styles.module.css";
 
@@ -96,10 +95,10 @@ const TopPartners: FC<TopPartnersProps> = ({ partners }) => {
   );
   const shades = useMemo(() => {
     const shadesCount = Math.ceil(partners.data.length / 2);
-    return shuffle([
+    return [
       ...shadeGenerator("#1a70ff", shadesCount),
       ...shadeGenerator("#ba1928", shadesCount),
-    ]);
+    ];
   }, [partners.data.length]);
 
   const onMouseEnter = useCallback((_: any, idx: number) => {

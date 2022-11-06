@@ -2,6 +2,7 @@ import { FC, MouseEventHandler, PropsWithChildren, useCallback } from "react";
 import { CopyIcon } from "../../assets";
 import copy from 'copy-to-clipboard';
 import s from './styles.module.css';
+import { toast } from "react-toastify";
 
 export type CopyProps = {
   value: string | number | boolean;
@@ -15,7 +16,12 @@ const Copy: FC<PropsWithChildren<CopyProps>> = ({
 }) => {
 	const onClick: MouseEventHandler<HTMLDivElement> = useCallback((e) => {
 		e.preventDefault();
-		copy(value.toString());
+		const status = copy(value.toString());
+		if(status){
+			toast.success('Скопировано')
+		} else {
+			toast.error('Ошибка копирования')
+		}
 		e.stopPropagation();
 	}, [value])
   return (

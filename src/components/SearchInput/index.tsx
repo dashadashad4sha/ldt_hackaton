@@ -1,7 +1,8 @@
 import clsx from "clsx";
-import { FC, ReactElement, useCallback, useMemo } from "react";
+import { FC, ReactElement, useCallback, useMemo, useState } from "react";
 import { CrossIcon } from "../../assets";
 import Input, { InputProps } from "../Input";
+import Loader from "../Loader";
 import s from "./styles.module.css";
 
 export type SearchInputProps = {
@@ -56,8 +57,16 @@ const SearchInput: FC<SearchInputProps> = ({
         Найти
       </button>
       {shouldRenderSuggestions && (
-        <div className={clsx(s.suggestions, { [s.loading]: isLoading })}>
-          {hasResults ? suggestions : "Нет результатов"}
+        <div className={clsx("block", s.suggestions)}>
+          {isLoading ? (
+            <div className={s.loader}>
+              <Loader />
+            </div>
+          ) : hasResults ? (
+            suggestions
+          ) : (
+            "Нет результатов"
+          )}
         </div>
       )}
     </div>

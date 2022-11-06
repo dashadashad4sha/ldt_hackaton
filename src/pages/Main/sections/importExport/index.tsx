@@ -73,6 +73,7 @@ const ImportExportGraph: FC<ImportExportGraphProps> = ({
       {hasData ? (
         <div>
           <BarChart
+		  	className={s.chart}
             width={500}
             height={300}
             data={data}
@@ -90,7 +91,6 @@ const ImportExportGraph: FC<ImportExportGraphProps> = ({
       ) : (
         "Нет данных"
       )}
-      <div></div>
     </section>
   );
 };

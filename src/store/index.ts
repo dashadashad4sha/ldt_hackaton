@@ -1,4 +1,5 @@
 import API from "../services/api";
+import AnalyticsStore from "./analytics";
 import FederalDistrictsStore from "./federalDistricts";
 import MainDataStore from "./mainData";
 import RecommendationsStore from "./recommendation";
@@ -13,6 +14,7 @@ class RootStore {
 	searchStore: SearchStore;
 	federalDistrictsStore: FederalDistrictsStore;
 	mainDataStore: MainDataStore;
+	analyticsStore: AnalyticsStore;
 	backendURL: API;
 	constructor(){
 		this.backendURL = new API({ baseURL });
@@ -21,6 +23,7 @@ class RootStore {
 		this.searchStore = new SearchStore(this.backendURL);
 		this.federalDistrictsStore = new FederalDistrictsStore(this.backendURL);
 		this.mainDataStore = new MainDataStore(this.backendURL);
+		this.analyticsStore = new AnalyticsStore(this.backendURL);
 	}
 }
 

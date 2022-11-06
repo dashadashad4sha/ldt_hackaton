@@ -7,3 +7,5 @@ export * from './Copy';
 export { default as Logo } from './Logo';
 export { default as Pattern } from './Pattern';
 export { default as RecommendationCard } from './RecommendationCard';
+export { default as OptionSelector} from './Options';
+export { default as Loader } from './Loader';

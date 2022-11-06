@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import { ChangeEventHandler, DetailedHTMLProps, Dispatch, FC, InputHTMLAttributes, SetStateAction, useCallback } from "react";
+import { ChangeEventHandler, DetailedHTMLProps, FC, InputHTMLAttributes, useCallback } from "react";
 import s from './styles.module.css';
 
 export type InputProps = {
 	value: string,
-	setValue: Dispatch<SetStateAction<string>>,
+	setValue: (val: InputProps['value']) => void;
 } & Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, 'value' | 'onChange'>
 
 const Input: FC<InputProps> = ({ value, setValue, className, ...rest }) => {
