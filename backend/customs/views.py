@@ -1,9 +1,11 @@
+import xlwt
 from django.db.models.functions import Coalesce, Round
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, mixins, status, generics
 from rest_framework.decorators import action
 from django.db.models import Sum, Q, IntegerField
 from rest_framework.response import Response
+from datetime import datetime
 
 from customs.models import Unit, Region, Country, CustomTnvedCode, FederalDistrict, CustomData, Recommendation, Sanction
 from customs.serializers import UnitSerializer, RegionSerializer, CountrySerializer, FederalDistrictSerializer, \
@@ -364,3 +366,140 @@ class TextAnalytic(viewsets.GenericViewSet,
         if instance:
             Response({'value': [value.get('country__country_name') for value in instance]})
         return Response({'value': []})
+
+    @action(methods=['GET'], detail=False, url_path='export_to_xlsx')
+    def export_to_exel(self, request, *args, **kwargs):
+        start_date = request.query_params.get('start_date', '2019-01-01')
+        end_date = request.query_params.get('end_date', '2019-12-31')
+        code = request.query_params.get('code')
+        region = request.query_params.get('region')
+
+        # get import_custom_volume(1), export_custom_volume(2), custom_fee(6)
+        instance = CustomData.objects.filter(period__range=(start_date, end_date))
+        if code:
+            instance = instance.filter(tnved__tnved_code=code)
+        if region:
+            instance = instance.filter(region__region_name=region)
+        instance = list(instance.values('direction', 'tnved__tnved_fee').annotate(
+            customs_volume=Coalesce(Round(Sum('price', output_field=IntegerField()) / 1000, 2), 0)))
+        import_custom_volume = 0
+        export_custom_volume = 0
+        custom_fee = ''
+        for rec in instance:
+            if rec['direction'] == 'И':
+                import_custom_volume = rec['customs_volume']
+                print("ok")
+                custom_fee = rec['tnved__tnved_fee']
+                print("ok")
+            if rec['direction'] == 'Э':
+                export_custom_volume = rec['customs_volume']
+                print("ok")
+
+        # get net_import (3) (clean import)
+        period_filter = f"and period between '{start_date}' and '{end_date}'"
+        if code:
+            code_filter = f"and ctc.tnved_code like '{code}'"
+        else:
+            code_filter = ''
+            print("not ok")
+        if region:
+            region_filter = f"and cr.region_name like '{region}'"
+        else:
+            region_filter = ''
+            print("not ok")
+        three = CustomData().retrieve_alalytic_three(period_filter=period_filter, region_filter=region_filter,
+                                                     code_filter=code_filter)[0]
+        clean_import = three['net_import']
+
+        # get import_growth (4) (clean_exp_imp_del)
+        if code:
+            code_filter = f"and ctc.tnved_code like '{code}'"
+        else:
+            code_filter = ''
+        if region:
+            region_filter = f"and cr.region_name like '{region}'"
+        else:
+            region_filter = ''
+        three = CustomData().retrieve_alalytic_four(region_filter=region_filter,
+                                                    code_filter=code_filter)[0]
+        clean_exp_imp_del = three['import_growth']
+
+        # get country_name (5) (main_partners)
+        if code:
+            code_filter = f"and ctc.tnved_code like '{code}'"
+        else:
+            code_filter = ''
+        if region:
+            region_filter = f"and cr.region_name like '{region}'"
+        else:
+            region_filter = ''
+        try:
+            three = CustomData().retrieve_alalytic_five(region_filter=region_filter, code_filter=code_filter)[0]
+        except IndexError:
+            three = 0
+        main_partners = three['country_name']
+
+        # get sanctions_import (7) (sanctions_import)
+        instance = list(
+            CustomData.objects.filter(tnved__tnved_code=code, direction='И').values('country__country_name').distinct(
+                'country__country_name'))
+
+        if instance:
+            sanctions_import = [value.get('country__country_name') for value in instance]
+        else:
+            sanctions_import = []
+
+        potential_volume = 0
+        if clean_import > 0:
+            potential_volume = clean_import
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="test.xls"'
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Test')
+
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+
+        columns = ['Код ТНВЭД',
+                   # 'Расшифровка кода',
+                   'Регион',
+                   'Период',
+                   'объём импорта',
+                   'объём экспорта',
+                   "чистый импорт/экспорт",
+                   "Изменение чистого импорта",
+                   "Основные партнеры по импорту",
+                   "Таможенные пошлины на импорт",
+                   "Наличие ограничений на импорт",
+                   "Потенциальный объем ниши",
+                   # "Выбывающий импорт из-за санкций",
+                   "Рост ниши за год"]
+
+        values = [code,
+                  # tnved_name,
+                  region,
+                  f'С {start_date} по {end_date}',
+                  import_custom_volume,
+                  export_custom_volume,
+                  clean_import,
+                  clean_exp_imp_del,
+                  main_partners,
+                  custom_fee,
+                  sanctions_import,
+                  potential_volume,
+                  # vyb_imp,
+                  clean_exp_imp_del]
+
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        for col_num in range(len(columns)):
+            ws.write(row_num + 1, col_num, values[col_num], font_style)
+
+        wb.save(response)
+
+        return response
