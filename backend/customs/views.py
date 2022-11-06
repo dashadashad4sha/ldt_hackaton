@@ -114,8 +114,8 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
         country = request.query_params.get('country')
 
         if start_date and end_date:
-            period_1 = f'where (cc.period between {start_date} and {end_date}) '
-            period_2 = f'where (cc.period between {start_date} and {end_date})'
+            period_1 = f"where (cc.period between '{start_date}' and '{end_date}') "
+            period_2 = f"where (cc.period between '{start_date}' and '{end_date}')"
         else:
             period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
             period_2 = "where cc.period between '2019-01-01' and '2021-12-31'"
@@ -148,7 +148,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
         region = request.query_params.get('region')
 
         if start_date and end_date:
-            period_1 = f'where (cc.period between {start_date} and {end_date}) '
+            period_1 = f"where (cc.period between '{start_date}' and '{end_date}') "
         else:
             period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
 
@@ -175,7 +175,7 @@ class CustomTnvedCodeView(viewsets.GenericViewSet,
         region = request.query_params.get('region')
 
         if start_date and end_date:
-            period_1 = f'where (cc.period between {start_date} and {end_date}) '
+            period_1 = f"where (cc.period between '{start_date}' and '{end_date}' ) "
         else:
             period_1 = "where cc.period between '2019-01-01' and '2021-12-31' "
 
